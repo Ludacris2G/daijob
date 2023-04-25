@@ -27,9 +27,28 @@ function Leftside({ props }) {
             </a>
           </Widget>
           <Item>
-            <span><img src="/images/bookmark.png" alt="" /></span>
+            <span>
+              <img src="/images/bookmark.png" alt="" />
+              My Items
+            </span>
           </Item>
         </ArtCard>
+        <CommunityCard>
+          <a>
+            <span>Groups</span>
+          </a>
+          <a>
+            <span>Events
+            <img src="/images/プラス.png" alt="" />
+            </span>
+          </a>
+          <a>
+            <span>Follow Hashtags</span>
+          </a>
+          <a>
+            <span>Discover more</span>
+          </a>
+        </CommunityCard>
       </Container>
     </div>
   )
@@ -108,22 +127,90 @@ const Widget = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 4px 12px;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.08);
-    }
   }
   div {
     display: flex;
     flex-direction: column;
     text-align: left;
+
+    span {
+      font-size: 12px;
+      line-height: 1.333;
+      &:first-child {
+        color: rgba(0, 0, 0, 0.6);
+      }
+      &:nth-child(2) {
+        color: rgba(0, 0, 0, 1);
+      }
+    }
+  }
+
+  &:hover {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+
+  img {
+    width: 25px;
+    color: rgba(0, 0, 0, 1);
+  }
+`;
+
+const Item = styled.a`
+  border-color: rgba(0, 0, 0, 0.8);
+  padding: 12px;
+  font-size: 12px;
+  display: block;
+  text-align: left;
+
+  span {
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 1);
   }
 
   img {
     width: 25px;
+    transform: rotate(-37deg);
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
   }
 `;
 
-const Item = styled.a``;
+const CommunityCard = styled(ArtCard)`
+  padding: 8px 0 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+
+  a {
+    color: black;
+    padding: 4px 12px 4px 12px;
+    font-size: 12px;
+    
+    &:hover {
+      color: #0a66c2;
+    }
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &:last-child {
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: none;
+    border-top: 1px solid #d6cec2;
+    padding: 12px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.08);
+      }
+    }
+  }
+  img {
+    width: 17px;
+  }
+`;
 
 export default Leftside;
