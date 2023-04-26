@@ -1,6 +1,6 @@
-import './App.css';
-import Header from './components/Header';
-import Home from './components/Home';
+import './App.css'
+import Header from './components/Header'
+import Home from './components/Home'
 import Login from './components/Login'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
@@ -22,3 +22,8 @@ export default App;
 // npm i react-router-dom
 // npm i styled-componenst
 //npm install --save-dev google-fonts-loader
+// npm i redux
+// npm i react-redux
+// npm i firebase
+// npm i firebase-tools
+// npm i redux-thunk

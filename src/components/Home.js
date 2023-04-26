@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import React from 'react';
-import Leftside from './Leftside';
-import Main from './Main';
-import Rightside from './Rightside';
+import styled from 'styled-components'
+import React from 'react'
+import Leftside from './Leftside'
+import Main from './Main'
+import Rightside from './Rightside'
 
 function Home() {
     return (
