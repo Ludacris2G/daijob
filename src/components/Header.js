@@ -1,10 +1,13 @@
 import styled from 'styled-components'
-
 import React from 'react'
+import { signOutAPI } from '../actions';
+import { connect } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
-function Header() {
+function Header(props) {
   return (
     <Container>
+        {!props.user && <Navigate to={'/'}/>}
         <Content>
             <Logo>
                 <a href='/home'>
@@ -54,12 +57,18 @@ function Header() {
 
                     <User>
                         <a>
+                            {props.user && props.user.photoURL ? (
+                            <img src={props.user.photoURL} />
+                            ) : (
                             <img src="/images/nav-user.png" alt="" />
-                            <span>Me</span>
+                            )}
+                            <span>
+                                Me
                             <img className='dropdown-img' src="/images/down-arrow.svg" alt="" />
+                            </span>
                         </a>
 
-                        <SignOut>
+                        <SignOut onClick={() => props.signOut()}>
                             <a>Sign Out</a>
                         </SignOut>
                     </User>
@@ -79,6 +88,19 @@ function Header() {
   )
 }
 
+const mapStateToProps = (state) => {
+    return {
+        user: state.userState.user,
+    };
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    signOut: () => dispatch(signOutAPI()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
+
+// STYLES
 const Container = styled.div`
     background-color: white;
     border-bottom: 1px solit rgba(0, 0, 0, 0.08);
@@ -236,7 +258,7 @@ const SignOut = styled.div`
 const User = styled(NavList)`
     a > img {
         width: 30px;
-        height: 24px;
+        height: 30px;
         border-radius: 50%;
         object-fit: cover;
     }
@@ -254,6 +276,9 @@ const User = styled(NavList)`
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-top: 19px;
+            margin-left: -27px;
+            cursor: pointer;
         }
     }
 `;
@@ -262,5 +287,3 @@ const Work = styled(User)`
     padding-left: 20px;
     border-left: 1px solid rgba(0, 0, 0, 0.08);
 `;
-
-export default Header
