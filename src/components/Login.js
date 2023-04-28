@@ -8,6 +8,7 @@ function Login(props)  {
   console.log(props)
   return (
     <Container>
+      {/* the props.user comes from mapStateToProps */}
       {props.user && <Navigate to='/home'/>}
       <Nav>
         <a href="/">

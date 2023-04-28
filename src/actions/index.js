@@ -13,9 +13,17 @@ export function signInAPI() {
             .then((result) => {
                 dispatch(setUser(result.user))
             }).catch((error) => {
-                const errorMessage = error.message;
-                alert(errorMessage);
+                alert(error.message);
             });
     };
 }
 
+export function getUserAuth() {
+    return (dispatch) => {
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                dispatch(setUser(user));
+            }
+        })
+    }
+}
