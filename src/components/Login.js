@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import React from 'react'
 import { connect } from 'react-redux'
 import { signInAPI } from '../actions'
 import { Navigate } from 'react-router-dom'

@@ -1,13 +1,10 @@
 import styled from 'styled-components'
-import React from 'react'
 import { signOutAPI } from '../actions';
 import { connect } from 'react-redux';
-import { Navigate } from 'react-router-dom';
 
 function Header(props) {
   return (
     <Container>
-        {!props.user && <Navigate to={'/'}/>}
         <Content>
             <Logo>
                 <a href='/home'>
@@ -57,7 +54,7 @@ function Header(props) {
 
                     <User>
                         <a>
-                            {props.user && props.user.photoURL ? (
+                            {props?.user && props?.user.photoURL ? (
                             <img src={props.user.photoURL} />
                             ) : (
                             <img src="/images/nav-user.png" alt="" />
