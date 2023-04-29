@@ -1,7 +1,28 @@
 import styled from 'styled-components'
 import PostModal from './PostModal'
+import { useState } from 'react'
 
 function Main(props) {
+  const [showModal, setModal] = useState("close");
+  const handleClick = (e) => {
+    e.preventDefault();
+    // cause this const is called in 2 places
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    switch (showModal) {
+      case "open":
+        setModal("close");
+        break;
+      case "close":
+        setModal("open");
+        break;
+      default:
+        setModal("close");
+        break;
+    }
+  }
   return (
     <div>
       <Container>
@@ -9,7 +30,7 @@ function Main(props) {
           Share
           <div>
             <img src="/images/nav-user.png" alt="" />
-            <button>Start a post</button>
+            <button onClick={handleClick}>Start a post</button>
           </div>
           <div>
             <button>
@@ -87,7 +108,7 @@ function Main(props) {
             </SocialActions>
           </Article>
         </div>
-        <PostModal />
+        <PostModal showModal={showModal} handleClick={handleClick} />
       </Container>
     </div>
   )

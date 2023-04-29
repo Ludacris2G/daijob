@@ -1,43 +1,64 @@
 import styled from 'styled-components'
+import { useState } from 'react'
 
 const PostModal = (props) => {
-    return (
-        <Container>
-            <Content>
-                <Header>
-                    <h2>Create a post</h2>
-                    <button>
-                        <img src="/images/プラス.png" alt="" />
-                    </button>
-                </Header>
-                <SharedContent>
-                    <UserInfo>
-                        <img src="/images/nav-user.png" alt="" />
-                        <span>Name</span>
-                    </UserInfo>
-                </SharedContent>
-                <ShareCreation>
-                    <AttachAssets>
-                        <AssetButton>
-                            <img src="/images/photo-icon.png" alt="" />
-                        </AssetButton>
-                        <AssetButton>
-                            <img src="/images/video-icon.png" alt="" />
-                        </AssetButton>
-                    </AttachAssets>
+    const [editorText, setEditorText] = useState("");
+    const [shareImage, setShareImage] = useState("");
 
-                    <ShareComment>
-                        <AssetButton>
-                            <img src="/images/megaphone.png" alt="" />
-                            Anyone
-                        </AssetButton>
-                    </ShareComment>
-                    <PostButton>
-                        post
-                    </PostButton>
-                </ShareCreation>
-            </Content>
-        </Container>
+    const handleChange = (e) => {
+        
+    }
+
+    const reset = (e) => {
+        setEditorText("");
+        props.handleClick(e);
+    }
+
+    return (
+        <>
+        { props.showModal === "open" &&
+            <Container>
+                <Content>
+                    <Header>
+                        <h2>Create a post</h2>
+                        <button onClick={(event) => reset(event)}>
+                            <img src="/images/プラス.png" alt="" />
+                        </button>
+                    </Header>
+                    <SharedContent>
+                        <UserInfo>
+                            <img src="/images/nav-user.png" alt="" />
+                            <span>Name</span>
+                        </UserInfo>
+                        <Editor>
+                        <textarea value={editorText} onChange={(e) => setEditorText(e.target.value)} placeholder='What do you want to talk about?' autoFocus={true}>
+                        </textarea>
+                        </Editor>
+                    </SharedContent>
+                    <ShareCreation>
+                        <AttachAssets>
+                            <AssetButton>
+                                <img src="/images/photo-icon.png" alt="" />
+                            </AssetButton>
+                            <AssetButton>
+                                <img src="/images/video-icon.png" alt="" />
+                            </AssetButton>
+                        </AttachAssets>
+
+                        <ShareComment>
+                            <AssetButton>
+                                <img src="/images/megaphone.png" alt="" />
+                                Anyone
+                            </AssetButton>
+                        </ShareComment>
+                        <PostButton disabled={!editorText}>
+                            Post
+                        </PostButton>
+                    </ShareCreation>
+                </Content>
+            </Container>
+        }
+        </>
     )
 }
 
@@ -50,6 +71,7 @@ const Container = styled.div`
     z-index: 9999;
     color: black;
     background-color: rgba(0, 0, 0, 0.8);
+    animation: fadeIn .3s;
 `;
 
 const Content = styled.div`
@@ -160,10 +182,25 @@ const PostButton = styled.button`
     border-radius: 20px;
     padding-left: 16px;
     padding-right: 16px;
-    background: #0a66c2;
-    color: white;
+    background: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.8)' : '#0a66c2')};
+    color: ${(props) => (props.disabled ? 'rgba(1, 1, 1, 0.2)' : 'white')};
     &:hover {
-        background: #004182;
+        background: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.08)' : '#004182')};
+    }
+`;
+
+const Editor = styled.div`
+    padding: 12px 24px;
+    textarea {
+        width: 100%;
+        min-height: 100px;
+        resize: none;
+    }
+    input {
+        width: 100%;
+        height: 35px;
+        font-size: 16px;
+        margin-bottom: 20px;
     }
 `;
 
