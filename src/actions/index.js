@@ -25,7 +25,7 @@ export function getUserAuth() {
                 dispatch(setUser(user));
             }
         })
-    }
+    };
 }
 
 export function signOutAPI() {
@@ -35,5 +35,11 @@ export function signOutAPI() {
         }).catch((error) => {
             console.log(error.message);
         })
+    };
+}
+
+export function postArticleAPI(payload) {
+    return (dispatch) => {
+        
     }
 }

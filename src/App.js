@@ -41,3 +41,4 @@ export default connect(mapStateToProps, mapDispatchToProps)(App);
 // npm i firebase
 // npm i firebase-tools
 // npm i redux-thunk
+// npm i react-player
