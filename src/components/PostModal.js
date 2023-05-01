@@ -288,8 +288,13 @@ const mapStateToProps = (state) => {
     };
 };
 
+const onProgress = (progress) => {
+    console.log(`Upload is ${progress}% done`);
+  };
+  
+
 const mapDispatchToProps = (dispatch) => ({
-    postArticle: (payload) => dispatch(postArticleAPI(payload)),
+    postArticle: (payload) => dispatch(postArticleAPI(payload, onProgress)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostModal);
