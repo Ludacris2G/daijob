@@ -201,8 +201,7 @@ const UserInfo = styled.div`
     align-items: center;
     padding: 12px 24px;
     img {
-        width: 48px;
-        height: 48px;
+        width: 48px !important;
         background-clip: content-box;
         border: 2px solid transparent;
         border-radius: 50%;
@@ -278,7 +277,7 @@ const Editor = styled.div`
 const UploadImage = styled.div`
     text-align: center;
     img {
-        width: 100%;
+        width: 100% !important;
     }
 `;
 

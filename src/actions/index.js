@@ -2,12 +2,17 @@ import firebase from 'firebase/app'
 import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable } from '../firebase'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
     user: payload,
 });
+
+export const setLoading = (status) => ({
+  type: SET_LOADING_STATUS,
+  status: status,
+})
 
 export function signInAPI() {
     return (dispatch) => {
@@ -42,6 +47,8 @@ export function signOutAPI() {
 
 export function postArticleAPI(payload, onProgress) {
     return (dispatch) => {
+      dispatch(setLoading(true));
+
       if (payload.image !== "") {
         const fileRef = ref(storage, `images/${payload.image.name}`);
         const uploadTask = uploadBytesResumable(fileRef, payload.image);
@@ -74,6 +81,7 @@ export function postArticleAPI(payload, onProgress) {
               addDoc(articlesRef, article)
                 .then((docRef) => {
                   console.log('Document written with ID: ', docRef.id);
+                  dispatch(setLoading(false));
                 })
                 .catch((error) => {
                   console.error('Error adding document: ', error);
@@ -100,59 +108,13 @@ export function postArticleAPI(payload, onProgress) {
         addDoc(articlesRef, article)
           .then(() => {
             console.log('Video added');
+            dispatch(setLoading(false));
           })
           .catch((error) => {
             console.error('Error adding video: ', error);
           })
-      }
+        }
     };
-  }
+}
   
-    
   
-
-// working code
-{/*
-export function postArticleAPI(payload) {
-    return (dispatch) => {
-        if (payload.image !== "") {
-            // const storage = getStorage();
-            const fileRef = ref(storage, `images/${payload.image.name}`);
-            const uploadTask = uploadBytes(fileRef, payload.image);
-            const articlesRef = collection(db, 'articles');
-
-      uploadTask
-        .then((snapshot) => {
-          getDownloadURL(fileRef)
-            .then((downloadURL) => {
-              console.log('File available at', downloadURL);
-              const article = {
-                actor: {
-                  description: payload.user.email,
-                  title: payload.user.displayName,
-                  date: payload.timestamp,
-                  image: payload.user.photoURL,
-                },
-                video: payload.video,
-                sharedImg: downloadURL,
-                comments: 0,
-                description: payload.description,
-              };
-              addDoc(articlesRef, article)
-                .then((docRef) => {
-                  console.log('Document written with ID: ', docRef.id);
-                })
-                .catch((error) => {
-                  console.error('Error adding document: ', error);
-                });
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
-}  */}
