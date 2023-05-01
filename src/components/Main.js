@@ -1,10 +1,16 @@
 import styled from 'styled-components'
 import PostModal from './PostModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
+import { getArticlesAPI } from '../actions';
 
 function Main(props) {
   const [showModal, setModal] = useState("close");
+
+  useEffect(() => {
+    props.getArticles()
+  }, []);
+
   const handleClick = (e) => {
     e.preventDefault();
     // cause this const is called in 2 places
@@ -125,10 +131,13 @@ const mapStateToProps = (state) => {
   return {
     loading: state.articleState.loading,
     user: state.userState.user,
+    articles: state.articleState.article,
   };
 }
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  getArticles: () => dispatch(getArticlesAPI()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
 

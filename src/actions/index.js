@@ -1,8 +1,9 @@
 import firebase from 'firebase/app'
-import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable } from '../firebase'
+import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy } from '../firebase'
+import { onSnapshot } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER, SET_LOADING_STATUS } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -12,6 +13,11 @@ export const setUser = (payload) => ({
 export const setLoading = (status) => ({
   type: SET_LOADING_STATUS,
   status: status,
+})
+
+export const getArticles = (payload) => ({
+  type: GET_ARTICLES,
+  payload: payload,
 })
 
 export function signInAPI() {
@@ -117,4 +123,15 @@ export function postArticleAPI(payload, onProgress) {
     };
 }
   
-  
+export function getArticlesAPI() {
+  let payload;
+
+  console.warn('hei');
+  return (dispatch) => {
+    const unsub = onSnapshot(collection(db, "articles"), (querySnapshot) => {
+      payload = querySnapshot.docs.map((doc) => doc.data());
+      console.log('All articles: ', payload);
+      dispatch(getArticles(payload));
+    });
+  };
+}
