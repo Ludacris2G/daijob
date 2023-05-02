@@ -94,7 +94,7 @@ function Main(props) {
               <a>
                   {
                      article.video ? (
-                      <ReactPlayer width={'100%'} url={article.video} origin='http://localhost:3000' controls/>
+                      <ReactPlayer width={'100%'} url={article.video} controls/>
                     ) : (
                       <img src={article.sharedImg} alt="" />
                     )
