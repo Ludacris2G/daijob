@@ -126,8 +126,8 @@ export function postArticleAPI(payload, onProgress) {
 export function getArticlesAPI() {
   let payload;
 
-  console.warn('hei');
   return (dispatch) => {
+    console.warn('feature????')
     const unsub = onSnapshot(
       collection(db, "articles"), 
       (querySnapshot) => {
