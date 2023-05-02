@@ -19,7 +19,7 @@ function Login(props)  {
       </Nav>
       <Section>
         <Hero>
-          <h1>Welcome to your professional community.</h1>
+          <h1>Your #1 app for finding jobs.</h1>
           <img src='/images/company_roudou_kumiai.png' alt="Company employees greeting you!" />
         </Hero>
         <Form>
@@ -72,6 +72,16 @@ const Nav = styled.div`
     height: 100%;
     width: initial;
   }
+  @media (max-width: 426px) {
+    flex-direction: column;
+    img {
+      width: 100%;
+      transform: scale(1.7);
+    }
+    a {
+      margin: 12px 10px;
+    }
+  }
 `;
 
 const Join = styled.a`
@@ -86,13 +96,16 @@ const Join = styled.a`
     color: rgba(0, 0, 0, 0.9);
     text-decoration: none;
   }
+  @media (max-width: 363px) {
+    font-size: 13px;
+  }
 `;
 
 const SignIn = styled.a`
   box-shadow: inset 0 0 0 1px #0a66c2;
   color: #0a66c2;
   border-radius: 24px;
-  transition-duration: 167px;
+  transition-duration: 167ms;
   font-size: 16px;
   font-weight: 600;
   line-height: 40px;
@@ -103,6 +116,10 @@ const SignIn = styled.a`
     background-color: rgba(112, 141, 249, 0.15);
     color: #0a66c2;
     text-decoration: none;
+  }
+
+  @media (max-width: 363px) {
+    font-size: 13px;
   }
 `;
 
@@ -122,6 +139,9 @@ const Section = styled.section`
   @media (max-width: 768px) {
     margin: auto;
     min-height: 0px;
+  }
+  @media (max-width: 426px) {
+    padding-top: 20px;
   }
 `;
 
