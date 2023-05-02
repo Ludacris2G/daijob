@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy } from '../firebase'
+import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy, query } from '../firebase'
 import { onSnapshot } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
@@ -126,11 +126,11 @@ export function postArticleAPI(payload, onProgress) {
 export function getArticlesAPI() {
   let payload;
 
-  console.warn('hei');
   return (dispatch) => {
-    const unsub = onSnapshot(
-      collection(db, "articles"), 
-      (querySnapshot) => {
+    console.warn('feature????')
+    const articlesRef = collection(db, 'articles');
+    const q = query(articlesRef, orderBy('actor.date', 'desc'));
+    const unsub = onSnapshot(q, orderBy('date', 'asc'), (querySnapshot) => {
       payload = querySnapshot.docs.map((doc) => doc.data());
       dispatch(getArticles(payload));
     });
