@@ -53,7 +53,7 @@ function Header(props) {
                     </NavList>
 
                     <User>
-                        <a>
+                        <a onClick={() => props.signOut()}>
                             {props?.user && props?.user.photoURL ? (
                             <img src={props.user.photoURL} />
                             ) : (

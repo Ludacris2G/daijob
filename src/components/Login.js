@@ -72,7 +72,7 @@ const Nav = styled.div`
     height: 100%;
     width: initial;
   }
-  @media (max-width: 426px) {
+  @media (max-width: 500px) {
     flex-direction: column;
     img {
       width: 100%;
@@ -140,7 +140,7 @@ const Section = styled.section`
     margin: auto;
     min-height: 0px;
   }
-  @media (max-width: 426px) {
+  @media (max-width: 500px) {
     padding-top: 20px;
   }
 `;
