@@ -4,7 +4,6 @@ import { signInAPI } from '../actions'
 import { Navigate } from 'react-router-dom'
 
 function Login(props)  {
-  console.log(props)
   return (
     <Container>
       {/* the props.user comes from mapStateToProps */}

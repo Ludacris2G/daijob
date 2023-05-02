@@ -197,6 +197,11 @@ const NavListWrap = styled.ul`
             border-color: rgba(0, 0, 0, 0.9);
         }
     }
+
+    @media (max-width: 768px) {
+        display: flex;
+        justify-content: center;
+    }
 `;
 
 const NavList = styled.li`
@@ -226,7 +231,10 @@ const NavList = styled.li`
         height: 40px;
     }
     @media (max-width: 768px) {
-        margin-right: 15px;
+        margin-right: 6px;
+        span {
+            font-size: 10px;
+        }
     }
 
     &:hover, 
@@ -283,4 +291,7 @@ const User = styled(NavList)`
 const Work = styled(User)`
     padding-left: 20px;
     border-left: 1px solid rgba(0, 0, 0, 0.08);
+    @media (max-width: 768px) {
+        padding-left: 4px;
+    }
 `;

@@ -127,7 +127,6 @@ export function getArticlesAPI() {
   let payload;
 
   return (dispatch) => {
-    console.warn('feature????')
     const articlesRef = collection(db, 'articles');
     const q = query(articlesRef, orderBy('actor.date', 'desc'));
     const unsub = onSnapshot(q, orderBy('date', 'asc'), (querySnapshot) => {

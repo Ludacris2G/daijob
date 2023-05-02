@@ -31,13 +31,8 @@ function Main(props) {
         break;
     }
   }
-  console.log(props)
   return (
     <div>
-      <>
-      { props.articles.length === 0 ? (
-        <p>There are no articles</p>
-      ) : (
       <Container>
         <ShareBox>
           <div>
@@ -67,6 +62,7 @@ function Main(props) {
             </button>
           </div>
         </ShareBox>
+        { props.articles.length === 0 && <p>No articles</p> }
         <Content>
           {props.loading && <img className='loading' src="/images/loading.gif" alt="" />}
           {props.articles.length > 0 && 
@@ -138,8 +134,6 @@ function Main(props) {
         </Content>
         <PostModal showModal={showModal} handleClick={handleClick} />
       </Container>
-      )}
-      </>
     </div>
   )
 }
