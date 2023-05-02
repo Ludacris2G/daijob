@@ -128,9 +128,10 @@ export function getArticlesAPI() {
 
   console.warn('hei');
   return (dispatch) => {
-    const unsub = onSnapshot(collection(db, "articles"), (querySnapshot) => {
+    const unsub = onSnapshot(
+      collection(db, "articles"), 
+      (querySnapshot) => {
       payload = querySnapshot.docs.map((doc) => doc.data());
-      console.log('All articles: ', payload);
       dispatch(getArticles(payload));
     });
   };

@@ -3,6 +3,7 @@ import PostModal from './PostModal'
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { getArticlesAPI } from '../actions';
+import ReactPlayer from 'react-player';
 
 function Main(props) {
   const [showModal, setModal] = useState("close");
@@ -30,8 +31,13 @@ function Main(props) {
         break;
     }
   }
+  console.log(props)
   return (
     <div>
+      <>
+      { props.articles.length === 0 ? (
+        <p>There are no articles</p>
+      ) : (
       <Container>
         <ShareBox>
           <div>
@@ -62,17 +68,19 @@ function Main(props) {
           </div>
         </ShareBox>
         <Content>
-          {
-            props.loading && <img className='loading' src="/images/loading.gif" alt="" />
-          }
-          <Article>
+          {props.loading && <img className='loading' src="/images/loading.gif" alt="" />}
+          {props.articles.length > 0 && 
+          props.articles.map((article, key) => (
+          <Article key={key}>
             <SharedActor>
               <a>
-                <img src="/images/nav-user.png" alt="" />
+                <img src={article.actor.image} alt="" />
                 <div>
-                  <span>Title</span>
-                  <span>Info</span>
-                  <span>Date</span>
+                  <span>{article.actor.title}</span>
+                  <span>{article.actor.description}</span>
+                  {article && article.actor && article.actor.date && (
+                    <span>{article.actor.date.toDate().toLocaleDateString()}</span>
+                  )}
                 </div>
               </a>
               <button>
@@ -80,11 +88,17 @@ function Main(props) {
               </button>
             </SharedActor>
             <Description>
-              Description
+              {article.description}
             </Description>
             <SharedImg>
               <a>
-                <img src="/images/shared-image.jpg" alt="" />
+                  {
+                     article.video ? (
+                      <ReactPlayer width={'100%'} url={article.video} origin='http://localhost:3000' controls/>
+                    ) : (
+                      <img src={article.sharedImg} alt="" />
+                    )
+                  }
               </a>
             </SharedImg>
             <SocialCounts>
@@ -120,9 +134,12 @@ function Main(props) {
               </button>
             </SocialActions>
           </Article>
+        ))}
         </Content>
         <PostModal showModal={showModal} handleClick={handleClick} />
       </Container>
+      )}
+      </>
     </div>
   )
 }
@@ -131,7 +148,7 @@ const mapStateToProps = (state) => {
   return {
     loading: state.articleState.loading,
     user: state.userState.user,
-    articles: state.articleState.article,
+    articles: state.articleState.articles,
   };
 }
 

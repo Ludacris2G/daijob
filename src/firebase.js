@@ -1,6 +1,6 @@
 import firebase from 'firebase/app'
 import { initializeApp } from 'firebase/app'
-import { getFirestore, serverTimestamp, collection, getDocs, addDoc, getDoc, doc, orderBy } from 'firebase/firestore'
+import { getFirestore, serverTimestamp, collection, getDocs, addDoc, getDoc, doc, orderBy, query } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { getStorage, ref, uploadBytes, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 
@@ -21,5 +21,5 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 const storage = getStorage();
 
-export { auth, provider, storage, signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider, serverTimestamp, ref, getStorage, collection, addDoc, getDownloadURL, uploadBytes, uploadBytesResumable, getDoc, doc, orderBy };
+export { auth, provider, storage, signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider, serverTimestamp, ref, getStorage, collection, addDoc, getDownloadURL, uploadBytes, uploadBytesResumable, getDoc, doc, orderBy, query };
 export default db;
