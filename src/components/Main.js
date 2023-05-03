@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import PostModal from './PostModal'
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { getArticlesAPI } from '../actions';
+import { getArticlesAPI, getUserAuth } from '../actions';
 import ReactPlayer from 'react-player';
 
 function Main(props) {

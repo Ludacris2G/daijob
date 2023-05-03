@@ -13,13 +13,15 @@ function Login(props)  {
           <img src="/images/logo.png" alt="" />
         </a>
         <div>
-          <Join>Join now</Join>
+          <Join href='/join'>
+            Join Now
+          </Join>
           <SignIn>Sign in</SignIn>
         </div>
       </Nav>
       <Section>
         <Hero>
-          <h1>Your #1 app for finding jobs.</h1>
+          <h1>Your #1 app for job hunting.</h1>
           <img src='/images/company_roudou_kumiai.png' alt="Company employees greeting you!" />
         </Hero>
         <Form>
@@ -91,6 +93,7 @@ const Join = styled.a`
   color: rgba(0, 0, 0, 0.6);
   margin-right: 12px;
   border-radius: 4px;
+  cursor: pointer;
   &:hover {
     background-color: rgba(0, 0, 0, 0.08);
     color: rgba(0, 0, 0, 0.9);
