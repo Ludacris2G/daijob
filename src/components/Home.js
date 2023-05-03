@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 function Home(props) {
     return (
         <Container>
-                {!props?.user && <Navigate to='/'/>}
+                {!props.user && <Navigate to='/'/>}
             <Section>
                 <h5>
                     <a>
