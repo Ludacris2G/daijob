@@ -1,7 +1,13 @@
 import React from 'react'
+import { useState } from 'react';
 import styled from 'styled-components'
 
 function Join() {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    console.log(firstName, lastName, email, password)
   return (
     <Container>
         <Link href='/'>
@@ -10,16 +16,18 @@ function Join() {
         <Form>
             <img src="/images/login.png" alt="" />
             <h2>Sign Up</h2>
-            <input type="text" placeholder='First Name' />
-            <input type="text" placeholder='Last Name' />
-            <input type="text" placeholder='email' />
-            <input type="password" placeholder='password' />
+            <input onChange={(e) => setFirstName(e.target.value)} value={firstName} type="text" placeholder='First Name' />
+            <input onChange={(e) => setLastName(e.target.value)} value={lastName} type="text" placeholder='Last Name' />
+            <input onChange={(e) => setEmail(e.target.value)} value={email} type="text" placeholder='Email' />
+            <input onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder='Password' />
             <small>Already a member? <a href="/login">Log In</a></small>
             <button>Sign Up</button>
         </Form>
     </Container>
   )
 }
+
+
 
 const Container = styled.div`
     margin: 100px auto;
@@ -54,8 +62,14 @@ const Form = styled.form`
         border-bottom: 1px solid black;
         padding: 8px ;
     }
+    small {
+        text-align: center;
+        font-size: 12px;
+        margin: 5px 0;
+    }
     button {
-        
+        background: transparent;
+        padding: 8px 14px;
     }
 `;
 

@@ -135,3 +135,7 @@ export function getArticlesAPI() {
     });
   };
 }
+
+export function signUpAPI() {
+  
+}

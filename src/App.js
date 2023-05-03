@@ -18,7 +18,7 @@ function App(props) {
       <Routes>
         <Route path='/' element={[<Login key='login'/>]}/>
         <Route path='/home' element={[<Header key='header'/>, <Home key='home'/>]}/>
-        <Route path='/join' element={[<Join/>]}/>
+        <Route path='/join' element={[<Join key='join'/>]}/>
       </Routes>
     </div>
     </Router>
