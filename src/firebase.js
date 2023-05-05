@@ -21,5 +21,5 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 const storage = getStorage();
 
-export { auth, provider, storage, signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider, serverTimestamp, ref, getStorage, collection, addDoc, getDownloadURL, uploadBytes, uploadBytesResumable, getDoc, doc, orderBy, query };
+export { auth, provider, storage, signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider, serverTimestamp, ref, getStorage, collection, addDoc, getDownloadURL, uploadBytes, uploadBytesResumable, getDoc, doc, orderBy, query, getAuth };
 export default db;

@@ -7,7 +7,7 @@ import ReactPlayer from 'react-player';
 
 function Main(props) {
   const [showModal, setModal] = useState("close");
-
+  
   useEffect(() => {
     props.getArticles()
   }, []);

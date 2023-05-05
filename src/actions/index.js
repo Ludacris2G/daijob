@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy, query } from '../firebase'
+import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy, query, getAuth, createUserWithEmailAndPassword } from '../firebase'
 import { onSnapshot } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
@@ -136,6 +136,18 @@ export function getArticlesAPI() {
   };
 }
 
-export function signUpAPI() {
-  
+export function signUpAPI(payload) {
+  return (dispatch) => {
+    createUserWithEmailAndPassword(auth, payload.email, payload.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        const displayName = `${payload.firstName} ${payload.lastName}`;
+        console.log(user);
+        user.displayName = displayName;
+        dispatch(setUser(user));
+      }) 
+      .catch((error) => {
+        alert(error.message);
+      })
+  }
 }

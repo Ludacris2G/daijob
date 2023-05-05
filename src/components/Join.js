@@ -1,15 +1,36 @@
 import React from 'react'
 import { useState } from 'react';
 import styled from 'styled-components'
+import { signUpAPI } from '../actions';
+import { connect } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
-function Join() {
+function Join(props) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     console.log(firstName, lastName, email, password)
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        if (e.target !== e.currentTarget) {
+            return;
+        }
+
+        const payload = {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password
+        }
+        props.logIn(payload);
+    }
+    console.log(props.user)
   return (
     <Container>
+        { props.user && <Navigate to='/home'/>}
         <Link href='/'>
             <img src="/images/logo.png" alt="" />
         </Link>
@@ -21,13 +42,23 @@ function Join() {
             <input onChange={(e) => setEmail(e.target.value)} value={email} type="text" placeholder='Email' />
             <input onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder='Password' />
             <small>Already a member? <a href="/login">Log In</a></small>
-            <button>Sign Up</button>
+            <button onClick={(e) => handleSubmit(e)}>Sign Up</button>
         </Form>
     </Container>
   )
 }
 
+const mapStateToProps = (state) => {
+    return {
+        user: state.userState.user,
+    };
+}
 
+const mapDispatchToProps = (dispatch) => ({
+    logIn: (payload) => dispatch(signUpAPI(payload))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Join);
 
 const Container = styled.div`
     margin: 100px auto;
@@ -72,5 +103,3 @@ const Form = styled.form`
         padding: 8px 14px;
     }
 `;
-
-export default Join
