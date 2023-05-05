@@ -42,7 +42,7 @@ function Join(props) {
             <input onChange={(e) => setEmail(e.target.value)} value={email} type="text" placeholder='Email' />
             <input onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder='Password' />
             <small>Already a member? <a href="/login">Log In</a></small>
-            <button onClick={(e) => handleSubmit(e)}>Sign Up</button>
+            <button disabled={!lastName || !firstName || !email || !password || password.length < 6} onClick={(e) => handleSubmit(e)}>Sign Up</button>
         </Form>
     </Container>
   )
@@ -61,10 +61,14 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Join);
 
 const Container = styled.div`
+    background-color: #fafafafa;
     margin: 100px auto;
     width: 300px;
     border-radius: 12px;
     border: 1px solid black;
+    -webkit-box-shadow: 1px 1px 20px 1px rgba(0,0,0,.7);
+    -moz-box-shadow: 1px 1px 20px 1px rgba(0,0,0,.7);
+    box-shadow: 1px 1px 20px 1px rgba(0,0,0,.7);
 `;
 
 const Link = styled.a`
@@ -101,5 +105,16 @@ const Form = styled.form`
     button {
         background: transparent;
         padding: 8px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 18px;
+        background-color: #00b894;
+        color: white;
+        &:hover {
+            background-color: #00b894c0;
+        }
+    }
+    button[disabled] {
+        background-color: lightgray;
     }
 `;

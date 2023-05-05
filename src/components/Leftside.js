@@ -11,7 +11,7 @@ function Leftside(props) {
             <a>
               <Photo />
               <Link> Welcome, 
-              {props?.user ? ' ' + props.user.displayName + '!' : 'there!'}</Link>
+              {props.user ? ' ' + props.user.displayName + '!' : 'there!'}</Link>
             </a>
             <a>
               <AddPhotoText>Add a photo</AddPhotoText>
