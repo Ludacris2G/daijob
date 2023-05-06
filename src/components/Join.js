@@ -10,7 +10,6 @@ function Join(props) {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    console.log(firstName, lastName, email, password)
 
     const handleSubmit = (e) => {
         e.preventDefault()

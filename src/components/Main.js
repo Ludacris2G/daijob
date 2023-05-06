@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import PostModal from './PostModal'
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { getArticlesAPI, getUserAuth } from '../actions';
+import { getArticlesAPI } from '../actions';
 import ReactPlayer from 'react-player';
 
 function Main(props) {
@@ -210,6 +210,11 @@ const ShareBox = styled(CommonCard)`
         border: 1px solid rgba(0, 0, 0, 0.15);
         background-color: white;
         text-align: left;
+        cursor: pointer;
+        &:hover {
+          color: rgba(0, 0, 0, 1);
+          border: 1px solid rgba(0, 0, 0, 1)
+        }
       }
     }
     &:nth-child(2) {

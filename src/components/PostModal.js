@@ -78,18 +78,16 @@ const PostModal = (props) => {
                         />
                         { assetArea === "image" ? (
                             <UploadImage>
-                                <input 
-                                    type="file" 
-                                    accept='image/gif, image/jpeg, image/png' name='image' 
-                                    id='file' 
-                                    style={{display: 'none'}} 
-                                    onChange={handleChange}
-                                />
-                                <p>
-                                    <label htmlFor="file">
-                                        Select an image to share
-                                    </label>
-                                </p>
+                                <label htmlFor="file">
+                                Select an image to share
+                                    <input 
+                                        type="file" 
+                                        accept='image/gif, image/jpeg, image/png' name='image' 
+                                        id='file' 
+                                        style={{display: 'none'}} 
+                                        onChange={handleChange}
+                                    />
+                                </label>
                                 {shareImage && <img src={URL.createObjectURL(shareImage)}/>}
                             </UploadImage>
                             ) : (
@@ -116,12 +114,12 @@ const PostModal = (props) => {
                             </AssetButton>
                         </AttachAssets>
 
-                        <ShareComment>
+                        {/* <ShareComment>
                             <AssetButton>
                                 <img src="/images/megaphone.png" alt="" />
                                 Anyone
                             </AssetButton>
-                        </ShareComment>
+                        </ShareComment> */}
                         <PostButton disabled={!editorText} onClick={(e) => postArticle(e)}>
                             Post
                         </PostButton>
@@ -143,6 +141,7 @@ const Container = styled.div`
     color: black;
     background-color: rgba(0, 0, 0, 0.8);
     animation: fadeIn .3s;
+    padding: 0 20px;
 `;
 
 const Content = styled.div`
@@ -171,10 +170,17 @@ const Header = styled.div`
     justify-content: space-between;
     align-items: center;
     button {
-        height: 40px;
-        width: 40px;
+        height: 50px;
+        width: 50px;
         min-width: auto;
         color: rgba(0, 0, 0, 0.15);
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        transition: all .3s ease-in-out;
+        &:hover {
+            transform: rotate(180deg);
+        }
         img {
             transform: rotate(45deg);
             pointer-events: none;
@@ -217,7 +223,7 @@ const UserInfo = styled.div`
 const ShareCreation = styled.div`
     display: flex;
     justify-content: space-between;
-    padding: 12px 24px 12px 16px;
+    padding: 0px 24px 12px 16px;
 `;
 
 const AssetButton = styled.button`
@@ -226,26 +232,34 @@ const AssetButton = styled.button`
     height: 40px;
     min-width: auto;
     color: rgba(0, 0, 0, 0.5);
+    border: none;
+    background: transparent;
+    margin-right: 20px;
+    cursor: pointer;
+    img {
+        width: 40px;
+    }
 `;
 
 const AttachAssets = styled.div`
     align-items: center;
     display: flex;
     padding-right: 8px;
+    padding-left: 10px;
     ${AssetButton} {
         width: 40px;
     }
 `;
 
 
-const ShareComment = styled.div`
-    padding-left: 8px;
-    margin-right: auto;
-    border-left: 1px solid rgba(0, 0, 0, 0.15);
-    ${AssetButton} {
-        margin-right: 5px;
-    }
-`;
+// const ShareComment = styled.div`
+//     padding-left: 8px;
+//     margin-right: auto;
+//     border-left: 1px solid rgba(0, 0, 0, 0.15);
+//     ${AssetButton} {
+//         margin-right: 5px;
+//     }
+// `;
 
 const PostButton = styled.button`
     min-width: 60px;
@@ -254,6 +268,7 @@ const PostButton = styled.button`
     padding-right: 16px;
     background: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.8)' : '#0a66c2')};
     color: ${(props) => (props.disabled ? 'rgba(1, 1, 1, 0.2)' : 'white')};
+    cursor: pointer;
     &:hover {
         background: ${(props) => (props.disabled ? 'rgba(0, 0, 0, 0.08)' : '#004182')};
     }
@@ -275,10 +290,29 @@ const Editor = styled.div`
 `;
 
 const UploadImage = styled.div`
-    text-align: center;
-    img {
-        width: 100% !important;
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #274f8fff;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #274f8fe0;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  label {
+    cursor: pointer;
+    width: 100%;
+    padding: 12px 18px;
+  }
 `;
 
 const mapStateToProps = (state) => {
