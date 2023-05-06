@@ -290,24 +290,20 @@ const Editor = styled.div`
 `;
 
 const UploadImage = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   background-color: #274f8fff;
   border-radius: 5px;
   color: white;
   cursor: pointer;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   &:hover {
     background-color: #274f8fe0;
   }
-
   img {
-    width: 100%;
+    width: 100% !important;
   }
-
   label {
     cursor: pointer;
     width: 100%;

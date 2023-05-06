@@ -15,9 +15,9 @@ function Main(props) {
   const handleClick = (e) => {
     e.preventDefault();
     // cause this const is called in 2 places
-    if (e.target !== e.currentTarget) {
-      return;
-    }
+    // if (e.target !== e.currentTarget) {
+    //   return;
+    // }
 
     switch (showModal) {
       case "open":
@@ -44,7 +44,7 @@ function Main(props) {
             <button disabled={props.loading} onClick={handleClick}>Start a post</button>
           </div>
           <div>
-            <button>
+            <button disabled={props.loading} onClick={handleClick}>
               <img src="/images/photo-icon.png" alt="" />
               <span>Photo</span>
             </button>
