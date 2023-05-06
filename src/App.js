@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { getUserAuth } from './actions'
 import { connect } from 'react-redux'
 import Join from './components/Join'
+import SignIn from './components/SignIn'
 
 function App(props) {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App(props) {
         <Route path='/' element={[<Login key='login'/>]}/>
         <Route path='/home' element={[<Header key='header'/>, <Home key='home'/>]}/>
         <Route path='/join' element={[<Join key='join'/>]}/>
+        <Route path='/signin' element={[<SignIn key='signin'/>]}/>
       </Routes>
     </div>
     </Router>

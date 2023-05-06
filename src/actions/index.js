@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy, query, getAuth, createUserWithEmailAndPassword } from '../firebase'
+import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy, query, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from '../firebase'
 import { onSnapshot } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
@@ -142,10 +142,34 @@ export function signUpAPI(payload) {
       .then((userCredential) => {
         const user = userCredential.user;
         const displayName = `${payload.firstName} ${payload.lastName}`;
+        if (user) {
+          updateProfile(auth.currentUser, {
+            displayName: displayName,
+          }).then(() => {
+            const updatedUser = { ...user, displayName: displayName };
+            dispatch(setUser(updatedUser));
+          }).catch((error) => {
+            alert(error.message);
+          });
+        }
         console.log(user);
-        user.displayName = displayName;
-        dispatch(setUser(user));
+        // user.displayName = displayName;
       }) 
+      .catch((error) => {
+        alert(error.message);
+      });
+  }
+}
+
+// works
+export function passwordSignInAPI(payload) {
+  return (dispatch) => {
+    signInWithEmailAndPassword(auth, payload.email, payload.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        dispatch(setUser(user));
+        console.log(user);
+      })
       .catch((error) => {
         alert(error.message);
       })

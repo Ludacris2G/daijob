@@ -16,7 +16,9 @@ function Login(props)  {
           <Join href='/join'>
             Join Now
           </Join>
-          <SignIn>Sign in</SignIn>
+          <SignIn href='/signin'>
+            Sign in
+          </SignIn>
         </div>
       </Nav>
       <Section>
@@ -115,6 +117,7 @@ const SignIn = styled.a`
   padding: 10px 24px;
   text-align: center;
   background-color: rgba(0, 0, 0, 0);
+  text-decoration: none;
   &:hover {
     background-color: rgba(112, 141, 249, 0.15);
     color: #0a66c2;

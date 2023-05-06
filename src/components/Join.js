@@ -27,8 +27,14 @@ function Join(props) {
         }
         props.logIn(payload);
     }
-    console.log(props.user)
-  return (
+
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        return emailRegex.test(email);
+    }
+
+    return (
     <Container>
         { props.user && <Navigate to='/home'/>}
         <Link href='/'>
@@ -37,11 +43,32 @@ function Join(props) {
         <Form>
             <img src="/images/login.png" alt="" />
             <h2>Sign Up</h2>
-            <input onChange={(e) => setFirstName(e.target.value)} value={firstName} type="text" placeholder='First Name' />
-            <input onChange={(e) => setLastName(e.target.value)} value={lastName} type="text" placeholder='Last Name' />
-            <input onChange={(e) => setEmail(e.target.value)} value={email} type="text" placeholder='Email' />
-            <input onChange={(e) => setPassword(e.target.value)} value={password} type="password" placeholder='Password' />
-            <small>Already a member? <a href="/login">Log In</a></small>
+            <input 
+                style={{border: firstName.length > 1 ? '2px solid #53a752' : '2px solid black'}} onChange={(e) => setFirstName(e.target.value)} 
+                value={firstName} 
+                type="text" 
+                placeholder='First Name' 
+            />
+            <input 
+                style={{border: lastName.length > 1 ? '2px solid #53a752' : '2px solid black'}} onChange={(e) => setLastName(e.target.value)} 
+                value={lastName} 
+                type="text" 
+                placeholder='Last Name' 
+            />
+            <input 
+                onChange={(e) => setEmail(e.target.value)} value={email} 
+                type="text" 
+                placeholder='Email' 
+                style={{ border: isValidEmail(email) ? '2px solid #53a752' : '2px solid black'}}
+            />
+            <input 
+                onChange={(e) => setPassword(e.target.value)} 
+                value={password} 
+                type="password" 
+                placeholder='Password' 
+                style={{ border: password.length > 5 ? '2px solid green' : '2px solid black'}}
+            />
+            <small>Already a member? <a href="/signin">Log In</a></small>
             <button disabled={!lastName || !firstName || !email || !password || password.length < 6} onClick={(e) => handleSubmit(e)}>Sign Up</button>
         </Form>
     </Container>
@@ -76,7 +103,11 @@ const Link = styled.a`
     justify-content: center;
     padding-top: 16px;
     img {
+        border-radius: 5px;
         width: 90%;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.15);
+        }
     }
 `;
 
@@ -94,8 +125,10 @@ const Form = styled.form`
     input {
         margin: 4px 0;
         border: 0;
-        border-bottom: 1px solid black;
-        padding: 8px ;
+        border: 2px solid black ;
+        border-radius: 5px;
+        padding: 8px;
+        outline: none;
     }
     small {
         text-align: center;
