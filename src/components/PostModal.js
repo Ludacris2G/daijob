@@ -4,12 +4,20 @@ import ReactPlayer from 'react-player'
 import { connect } from 'react-redux'
 import { serverTimestamp } from '../firebase'
 import { postArticleAPI } from '../actions'
+import { useEffect } from 'react'
 
 const PostModal = (props) => {
     const [editorText, setEditorText] = useState("");
     const [shareImage, setShareImage] = useState("");
     const [videoLink, setVideoLink] = useState("");
     const [assetArea, setAssetArea] = useState("");
+    console.warn(props.showPictureUpload)
+
+    useEffect(() => {
+        if (props.showPictureUpload === 'image') {
+            switchAssetArea('image');
+        }
+    }, [props.showPictureUpload])
 
     const handleChange = (e) => {
         const image = e.target.files[0];
@@ -32,6 +40,7 @@ const PostModal = (props) => {
         setShareImage("");
         setVideoLink("");
         setAssetArea("");
+        props.handleClosePhotoClick();
         props.handleClick(e);
     };
 

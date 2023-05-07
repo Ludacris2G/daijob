@@ -2,11 +2,12 @@ import styled from 'styled-components'
 import PostModal from './PostModal'
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { getArticlesAPI } from '../actions';
+import { getArticlesAPI, switchAreaPhoto } from '../actions';
 import ReactPlayer from 'react-player';
 
 function Main(props) {
   const [showModal, setModal] = useState("close");
+  const [showPictureUpload, setShowPictureUpload] = useState('');
   
   useEffect(() => {
     props.getArticles()
@@ -15,9 +16,9 @@ function Main(props) {
   const handleClick = (e) => {
     e.preventDefault();
     // cause this const is called in 2 places
-    // if (e.target !== e.currentTarget) {
-    //   return;
-    // }
+    if (e.target !== e.currentTarget) {
+      return;
+    }
 
     switch (showModal) {
       case "open":
@@ -30,6 +31,32 @@ function Main(props) {
         setModal("close");
         break;
     }
+  }
+
+  const handlePhotoClick = (e) => {
+    e.preventDefault();
+
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    switch(showModal) {
+      case "open":
+        setModal("close");
+        break;
+      case "close":
+        setModal("open");
+        break;
+      default:
+        setModal("close");
+        break;
+    }
+
+    setShowPictureUpload('image');
+  }
+
+  const handleClosePhotoClick = () => {
+    setShowPictureUpload('');
   }
   return (
     <div>
@@ -44,7 +71,7 @@ function Main(props) {
             <button disabled={props.loading} onClick={handleClick}>Start a post</button>
           </div>
           <div>
-            <button disabled={props.loading} onClick={handleClick}>
+            <button disabled={props.loading} onClick={handlePhotoClick}>
               <img src="/images/photo-icon.png" alt="" />
               <span>Photo</span>
             </button>
@@ -132,7 +159,7 @@ function Main(props) {
           </Article>
         ))}
         </Content>
-        <PostModal showModal={showModal} handleClick={handleClick} />
+        <PostModal showModal={showModal} handleClick={handleClick} setShowPictureUpload={setShowPictureUpload} showPictureUpload={showPictureUpload} handleClosePhotoClick={handleClosePhotoClick} />
       </Container>
     </div>
   )
@@ -192,6 +219,20 @@ const ShareBox = styled(CommonCard)`
       display: flex;
       align-items: center;
       font-weight: 600;
+      cursor: pointer;
+      &:hover {
+        span {
+          color: #70b5f9b0 !important;
+        }
+      }
+      img {
+          margin: 0 4px 0 -2px;
+          pointer-events: none;
+        }
+        span {
+          color: #70b5f9;
+          pointer-events: none;
+        }
     }
     &:first-child {
       display: flex;
@@ -222,15 +263,6 @@ const ShareBox = styled(CommonCard)`
       flex-wrap: wrap;
       justify-content: space-around;
       padding-bottom: 4px;
-
-      button {
-        img {
-          margin: 0 4px 0 -2px;
-        }
-        span {
-          color: #70b5f9;
-        }
-      }
     }
   }
 `;
@@ -257,6 +289,7 @@ const SharedActor = styled.div`
     img {
       width: 48px;
       height: 48px;
+      border-radius: 50%;
     }
     & > div {
       display: flex;
@@ -324,7 +357,22 @@ const SocialCounts = styled.ul`
     margin-right: 5px;
     font-size: 12px;
     button {
+      border: none;
       display: flex;
+      border-radius: 10px;
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(0, 0, 0 , .15);
+      }
+    }
+  }
+  @media (max-width:768px) {
+    li {
+      button {
+        img {
+          width: 20px;
+        }
+      }
     }
   }
 `;
@@ -333,6 +381,7 @@ const SocialActions = styled.div`
   align-items: center;
   display: flex;
   justify-content: flex-start;
+  flex-wrap: wrap;
   margin: 0;
   min-height: 40px;
   padding: 4px 8px;
@@ -343,9 +392,19 @@ const SocialActions = styled.div`
     color: #0a66c2;
     height: 40px;
     margin-right: 5px;
-    @media (min-width: 768px) {
-      span {
-        margin-left: 8px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+    @media (max-width: 768px) {
+      margin-right: 7px;
+      padding: 0;
+      font-size: 12px;
+      height: 25px;
+      img {
+        width: 20px;
       }
     }
   }
