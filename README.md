@@ -6,9 +6,10 @@ This web app built with React and Redux allows you to search for jobs, post jobs
 
 - Search for jobs posted by other users
 - Post job listings with pictures or videos
-- Like and comment on job listings (coming soon)
+- Like job listings
+- Comment on job listings (coming soon)
 - Log In and log out with Google
-- Create an account with email and password (coming soon)
+- Create an account with email and password
 - Join groups and interact with other jobseekers (coming soon)
 
 ## Technologies Used
