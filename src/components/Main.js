@@ -166,7 +166,7 @@ function Main(props) {
               </button>
               <button>
                 <img src="/images/megaphone.png" alt="" />
-                <span>Comments</span>
+                <span>Comment</span>
               </button>
               <button>
                 <img src="/images/share.png" alt="" />
@@ -420,7 +420,7 @@ const SocialActions = styled.div`
     border-radius: 10px;
     cursor: pointer;
     &:hover {
-      background-color: rgba(0, 0, 0, 0.15);
+      background-color: rgba(0, 0, 0, 0.15) !important;
     }
     img {
       pointer-events: none;
@@ -430,7 +430,7 @@ const SocialActions = styled.div`
     }
     @media (max-width: 768px) {
       margin-right: 7px;
-      padding: 0;
+      padding: 0 5px;
       font-size: 12px;
       height: 25px;
       img {
