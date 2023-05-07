@@ -67,7 +67,7 @@ function Main(props) {
 
     const payload = {
       id: id,
-      userId: props.user.email,
+      userId: props.user?.email,
     }
 
     props.likePost(payload)
@@ -77,7 +77,7 @@ function Main(props) {
       <Container>
         <ShareBox>
           <div>
-            {props.user && props.user.photoURL ? (
+            {props?.user && props.user?.photoURL ? (
               <img src={props.user.photoURL} alt="" />
             ) : (
               <img src="/images/nav-user.png" alt="" />
@@ -103,10 +103,10 @@ function Main(props) {
             </button>
           </div>
         </ShareBox>
-        { props.articles.length === 0 && <p>No articles</p> }
+        { props?.articles.length === 0 && <p>No articles</p> }
         <Content>
           {props.loading && <img className='loading' src="/images/loading.gif" alt="" />}
-          {props.articles.length > 0 && 
+          {props?.articles.length > 0 && 
           props.articles.map((article, key) => (
           <Article key={article.id}>
             <SharedActor>
@@ -154,12 +154,12 @@ function Main(props) {
             </SocialCounts>
             <SocialActions>
               <button 
-                style={{backgroundColor: article.likeUsers.includes(props.user.email) ? 'rgba(0, 0, 0, 0.2) ' : '#f0f0f0'}} 
+                style={{backgroundColor: article.likeUsers.includes(props?.user?.email) ? 'rgba(0, 0, 0, 0.2) ' : '#f0f0f0'}} 
                 onClick={(e) => likePost(e, article.id)}
               >
                 <img src="/images/親指.png" alt="" />
                 <span 
-                  style={{fontWeight: article.likeUsers.includes(props.user.email) ? '700' : '400'}}
+                  style={{fontWeight: article.likeUsers.includes(props?.user?.email) ? '700' : '400'}}
                 >
                   Like
                 </span>

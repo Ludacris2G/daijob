@@ -35,7 +35,7 @@ function Join(props) {
 
     return (
     <Container>
-        { props.user && <Navigate to='/home'/>}
+        { props?.user && <Navigate to='/home'/>}
         <Link href='/'>
             <img src="/images/logo.png" alt="" />
         </Link>

@@ -74,12 +74,12 @@ const PostModal = (props) => {
                     </Header>
                     <SharedContent>
                         <UserInfo>
-                            {props.user.photoURL ? (
-                                <img src={props.user.photoURL}/>
+                            {props?.user.photoURL ? (
+                                <img src={props?.user.photoURL}/>
                             ) : (
                                 <img src="/images/nav-user.png" alt="" />
                             )}
-                            <span>{props.user.displayName}</span>
+                            <span>{props?.user.displayName}</span>
                         </UserInfo>
                         <Editor>
                         <textarea value={editorText} onChange={(e) => setEditorText(e.target.value)} placeholder='What do you want to talk about?' autoFocus={true}

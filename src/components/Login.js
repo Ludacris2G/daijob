@@ -7,7 +7,7 @@ function Login(props)  {
   return (
     <Container>
       {/* the props.user comes from mapStateToProps */}
-      {props.user && <Navigate to='/home'/>}
+      {props?.user && <Navigate to='/home'/>}
       <Nav>
         <a href="/">
           <img src="/images/logo.png" alt="" />

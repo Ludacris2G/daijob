@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { signOutAPI } from '../actions';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function Header(props) {
   return (
@@ -56,7 +57,7 @@ function Header(props) {
                     <User>
                         <a onClick={() => props.signOut()}>
                             {props?.user && props?.user.photoURL ? (
-                            <img src={props.user.photoURL} />
+                            <img src={props?.user?.photoURL} />
                             ) : (
                             <img src="/images/nav-user.png" alt="" />
                             )}
