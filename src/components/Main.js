@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import PostModal from './PostModal'
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { getArticlesAPI, switchAreaPhoto } from '../actions';
+import { getArticlesAPI, likePostAPI, switchAreaPhoto } from '../actions';
 import ReactPlayer from 'react-player';
 
 function Main(props) {
@@ -58,6 +58,20 @@ function Main(props) {
   const handleClosePhotoClick = () => {
     setShowPictureUpload('');
   }
+
+  const likePost = (e, id) => {
+    e.preventDefault();
+    if (e.target != e.currentTarget) {
+      return;
+    }
+
+    const payload = {
+      id: id,
+      userId: props.user.email,
+    }
+
+    props.likePost(payload)
+  }
   return (
     <div>
       <Container>
@@ -94,7 +108,7 @@ function Main(props) {
           {props.loading && <img className='loading' src="/images/loading.gif" alt="" />}
           {props.articles.length > 0 && 
           props.articles.map((article, key) => (
-          <Article key={key}>
+          <Article key={article.id}>
             <SharedActor>
               <a>
                 <img src={article.actor.image} alt="" />
@@ -129,17 +143,17 @@ function Main(props) {
                 <button>
                   <img src="/images/親指.png" alt="" />
                   <img src="/images/washing-hands.png" alt="" />
-                  <span>75</span>
+                  <span>{article.likes}</span>
                 </button>
               </li>
               <li>
                 <a>
-                  2 comments
+                  {article.comments} comments
                 </a>
               </li>
             </SocialCounts>
             <SocialActions>
-              <button>
+              <button onClick={(e) => likePost(e, article.id)}>
                 <img src="/images/親指.png" alt="" />
                 <span>Like</span>
               </button>
@@ -175,6 +189,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   getArticles: () => dispatch(getArticlesAPI()),
+  likePost: (payload) => dispatch(likePostAPI(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
@@ -347,18 +362,20 @@ const SharedImg = styled.div`
 const SocialCounts = styled.ul`
   line-height: 1.3;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   overflow: auto;
   margin: 0 16px;
   padding: 8px 0;
   border-bottom: 1px solid #e9e5df;
   list-style: none;
   li {
+    display: flex;
     margin-right: 5px;
     font-size: 12px;
     button {
       border: none;
       display: flex;
+      align-items: center;
       border-radius: 10px;
       cursor: pointer;
       &:hover {
@@ -397,6 +414,12 @@ const SocialActions = styled.div`
     cursor: pointer;
     &:hover {
       background-color: rgba(0, 0, 0, 0.15);
+    }
+    img {
+      pointer-events: none;
+    }
+    span {
+      pointer-events: none;
     }
     @media (max-width: 768px) {
       margin-right: 7px;

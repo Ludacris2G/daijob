@@ -11,7 +11,6 @@ const PostModal = (props) => {
     const [shareImage, setShareImage] = useState("");
     const [videoLink, setVideoLink] = useState("");
     const [assetArea, setAssetArea] = useState("");
-    console.warn(props.showPictureUpload)
 
     useEffect(() => {
         if (props.showPictureUpload === 'image') {

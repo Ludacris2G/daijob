@@ -1,9 +1,9 @@
 import firebase from 'firebase/app'
 import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy, query, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from '../firebase'
-import { onSnapshot } from 'firebase/firestore'
+import { onSnapshot, updateDoc } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -13,10 +13,15 @@ export const setUser = (payload) => ({
 export const setLoading = (status) => ({
   type: SET_LOADING_STATUS,
   status: status,
-})
+});
 
 export const getArticles = (payload) => ({
   type: GET_ARTICLES,
+  payload: payload,
+});
+
+export const likePost = (payload) => ({
+  type: LIKE_POST,
   payload: payload,
 })
 
@@ -82,6 +87,8 @@ export function postArticleAPI(payload, onProgress) {
                 video: payload.video,
                 sharedImg: downloadURL,
                 comments: 0,
+                likes: 0,
+                likeUsers: [],
                 description: payload.description,
               };
               addDoc(articlesRef, article)
@@ -109,6 +116,8 @@ export function postArticleAPI(payload, onProgress) {
           video: payload.video,
           sharedImg: '',
           comments: 0,
+          likes: 0,
+          likeUsers: [],
           description: payload.description,
         }
         addDoc(articlesRef, article)
@@ -130,7 +139,11 @@ export function getArticlesAPI() {
     const articlesRef = collection(db, 'articles');
     const q = query(articlesRef, orderBy('actor.date', 'desc'));
     const unsub = onSnapshot(q, orderBy('date', 'asc'), (querySnapshot) => {
-      payload = querySnapshot.docs.map((doc) => doc.data());
+      payload = querySnapshot.docs.map((doc) => {
+        const article = doc.data();
+        article.id = doc.id;
+        return article;
+      });
       dispatch(getArticles(payload));
     });
   };
@@ -172,6 +185,36 @@ export function passwordSignInAPI(payload) {
       })
       .catch((error) => {
         alert(error.message);
+      })
+  }
+}
+
+export function likePostAPI(payload) {
+  return(dispatch) => {
+    console.log(payload.id, payload.userId);
+    
+    const articleRef = doc(db, 'articles', payload.id);
+    getDoc(articleRef)
+      .then((doc) => {
+        if (doc.exists()) {
+          const articleData = doc.data();
+          console.log(articleData)
+          if (!articleData.likeUsers.includes(payload.userId)) {
+            const newLikes = articleData.likes + 1;
+            const newLikeUsers = [...articleData.likeUsers, payload.userId];
+            updateDoc(articleRef, { likes: newLikes, likeUsers: newLikeUsers })
+              .then(() => {
+                dispatch(likePost({ id: payload.id, likes: newLikes, likeUsers: newLikeUsers }));
+              })
+          } else if (articleData.likeUsers.includes(payload.userId)) {
+            const newLikes = articleData.likes - 1;
+            const newLikeUsers = articleData.likeUsers.filter((user) => user !== payload.userId);
+            updateDoc(articleRef, { likes: newLikes, likeUsers: newLikeUsers })
+              .then(() => {
+                dispatch(likePost({ id: payload.id, likes: newLikes, likeUsers: newLikeUsers }))
+              })
+          }
+        }
       })
   }
 }
