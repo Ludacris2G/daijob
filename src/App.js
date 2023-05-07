@@ -8,11 +8,28 @@ import { getUserAuth } from './actions'
 import { connect } from 'react-redux'
 import Join from './components/Join'
 import SignIn from './components/SignIn'
+import { auth } from './firebase'
+import { useState } from 'react'
 
 function App(props) {
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    props.getUserAuth();
+    const refreshUser = auth.onAuthStateChanged(user => {
+      props.getUserAuth();
+      setIsLoading(false);
+    });
+
+    return refreshUser;
   }, []);
+
+  if (isLoading) {
+    return (
+      <div style={{ position: 'relative' }}>
+        <img className='loading' src="/images/loading.gif" alt="" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, 0%)', overflowY: 'hidden' }} />
+      </div>
+    );
+    
+  }
   return (
     <Router>
     <div className="App">

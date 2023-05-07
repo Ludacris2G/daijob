@@ -191,14 +191,12 @@ export function passwordSignInAPI(payload) {
 
 export function likePostAPI(payload) {
   return(dispatch) => {
-    console.log(payload.id, payload.userId);
     
     const articleRef = doc(db, 'articles', payload.id);
     getDoc(articleRef)
       .then((doc) => {
         if (doc.exists()) {
           const articleData = doc.data();
-          console.log(articleData)
           if (!articleData.likeUsers.includes(payload.userId)) {
             const newLikes = articleData.likes + 1;
             const newLikeUsers = [...articleData.likeUsers, payload.userId];
