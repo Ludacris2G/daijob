@@ -153,9 +153,16 @@ function Main(props) {
               </li>
             </SocialCounts>
             <SocialActions>
-              <button onClick={(e) => likePost(e, article.id)}>
+              <button 
+                style={{backgroundColor: article.likeUsers.includes(props.user.email) ? 'rgba(0, 0, 0, 0.2) ' : '#f0f0f0'}} 
+                onClick={(e) => likePost(e, article.id)}
+              >
                 <img src="/images/親指.png" alt="" />
-                <span>Like</span>
+                <span 
+                  style={{fontWeight: article.likeUsers.includes(props.user.email) ? '700' : '400'}}
+                >
+                  Like
+                </span>
               </button>
               <button>
                 <img src="/images/megaphone.png" alt="" />
@@ -406,7 +413,7 @@ const SocialActions = styled.div`
     display: inline-flex;
     align-items: center;
     padding: 8px;
-    color: #0a66c2;
+    color: black;
     height: 40px;
     margin-right: 5px;
     border: none;
