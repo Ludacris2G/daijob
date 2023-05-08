@@ -4,10 +4,13 @@ import { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { getArticlesAPI, likePostAPI, switchAreaPhoto } from '../actions';
 import ReactPlayer from 'react-player';
+import CommentModal from './CommentModal';
+import Comment from './Comment';
 
 function Main(props) {
   const [showModal, setModal] = useState("close");
   const [showPictureUpload, setShowPictureUpload] = useState('');
+  const [showCommentModal, setShowCommentModal] = useState(false);
   
   useEffect(() => {
     props.getArticles()
@@ -72,6 +75,19 @@ function Main(props) {
 
     props.likePost(payload)
   }
+
+  const openCommentModal = () => {
+    switch(showCommentModal) {
+      case false:
+        setShowCommentModal(true);
+        break;
+      case true:
+        setShowCommentModal(false);
+        break;
+      default:
+        setShowCommentModal(false);
+    }
+  }
   return (
     <div>
       <Container>
@@ -107,7 +123,7 @@ function Main(props) {
         <Content>
           {props.loading && <img className='loading' src="/images/loading.gif" alt="" />}
           {props?.articles.length > 0 && 
-          props.articles.map((article, key) => (
+          props.articles.map((article) => (
           <Article key={article.id}>
             <SharedActor>
               <a>
@@ -164,9 +180,12 @@ function Main(props) {
                   Like
                 </span>
               </button>
-              <button>
+              <button 
+                onClick={openCommentModal}
+                style={{backgroundColor: showCommentModal ? 'rgba(0, 0, 0, .2)' : '#f0f0f0'}}
+              >
                 <img src="/images/megaphone.png" alt="" />
-                <span>Comment</span>
+                <span style={{fontWeight: showCommentModal ? '700' : '400'}}>Comment</span>
               </button>
               <button>
                 <img src="/images/share.png" alt="" />
@@ -177,6 +196,10 @@ function Main(props) {
                 <span>Send</span>
               </button>
             </SocialActions>
+            { showCommentModal && (<CommentModal id={article.id}/>)}
+            { article.comments > 0 && article.commentsUsers.map((comment, i) => (
+              <Comment key={i} comment={comment}/>
+            ))}
           </Article>
         ))}
         </Content>
@@ -293,6 +316,7 @@ const Article = styled(CommonCard)`
   padding: 0;
   margin: 0 0 8px;
   overflow: visible;
+  padding-bottom: 1px;
 `;
 const SharedActor = styled.div`
   padding-right: 40px;

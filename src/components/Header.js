@@ -55,9 +55,9 @@ function Header(props) {
                     </NavList>
 
                     <User>
-                        <a onClick={() => props.signOut()}>
-                            {props?.user && props?.user.photoURL ? (
-                            <img src={props?.user?.photoURL} />
+                        <a>
+                            {props.user && props.user.photoURL ? (
+                            <img src={ props.user.photoURL } />
                             ) : (
                             <img src="/images/nav-user.png" alt="" />
                             )}
@@ -260,6 +260,12 @@ const SignOut = styled.div`
     transition-duration: 167ms;
     text-align: center;
     display: none;
+    @media (max-width: 768px) {
+        top: -60px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        border-radius: 5px 5px 0 0;
+    }
 `;
 
 const User = styled(NavList)`

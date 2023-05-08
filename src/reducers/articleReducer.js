@@ -1,4 +1,4 @@
-import { SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST } from "../actions/actionType";
+import { SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST } from "../actions/actionType";
 
 export const initState = {
     articles: [],
@@ -34,6 +34,23 @@ const articleReducer = (state = initState, action) => {
                 ...state,
                 articles: updatedArticles,
             };
+        case COMMENT_POST:
+            const { commentUsers, comments, articleId } = action.payload;
+            const updatedArticleComments = state.articles.map((article) => {
+                if (article.id === articleId) {
+                    return {
+                        ...article,
+                        comments: comments,
+                        commentUsers: commentUsers,
+                    };
+                } else {
+                    return article;
+                }
+            })
+            return {
+                ...state,
+                articles: updatedArticleComments,
+            }
         default:
             return state;
     }

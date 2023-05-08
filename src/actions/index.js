@@ -3,7 +3,7 @@ import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorag
 import { onSnapshot, updateDoc } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -22,6 +22,11 @@ export const getArticles = (payload) => ({
 
 export const likePost = (payload) => ({
   type: LIKE_POST,
+  payload: payload,
+})
+
+export const commentPost = (payload) => ({
+  type: COMMENT_POST,
   payload: payload,
 })
 
@@ -87,6 +92,7 @@ export function postArticleAPI(payload, onProgress) {
                 video: payload.video,
                 sharedImg: downloadURL,
                 comments: 0,
+                commentsUsers: [],
                 likes: 0,
                 likeUsers: [],
                 description: payload.description,
@@ -116,6 +122,7 @@ export function postArticleAPI(payload, onProgress) {
           video: payload.video,
           sharedImg: '',
           comments: 0,
+          commentsUsers: [],
           likes: 0,
           likeUsers: [],
           description: payload.description,
@@ -212,6 +219,24 @@ export function likePostAPI(payload) {
                 dispatch(likePost({ id: payload.id, likes: newLikes, likeUsers: newLikeUsers }))
               })
           }
+        }
+      })
+  }
+}
+
+export function postCommentAPI(payload) {
+  return (dispatch) => {
+    const articleRef = doc(db, 'articles', payload.articleId);
+    getDoc(articleRef)
+      .then((doc) => {
+        if (doc.exists()) {
+          const articleData = doc.data();
+          const newComments = [...articleData.commentsUsers, payload.comment];
+          const newCommentCount = articleData.comments + 1;
+          updateDoc(articleRef, { commentsUsers: newComments, comments: newCommentCount })
+            .then(() => {
+              dispatch(commentPost({ commentUsers: newComments, comments: newCommentCount, articleId: payload.articleId }));
+            })
         }
       })
   }
