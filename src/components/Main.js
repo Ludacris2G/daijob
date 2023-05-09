@@ -6,11 +6,13 @@ import { getArticlesAPI, likePostAPI, switchAreaPhoto } from '../actions';
 import ReactPlayer from 'react-player';
 import CommentModal from './CommentModal';
 import Comment from './Comment';
+import ArticleSettings from './ArticleSettings';
 
 function Main(props) {
   const [showModal, setModal] = useState("close");
   const [showPictureUpload, setShowPictureUpload] = useState('');
   const [showCommentModal, setShowCommentModal] = useState(false);
+  const [showArticleSettings, setShowArticleSettings] = useState(false);
   
   useEffect(() => {
     props.getArticles()
@@ -76,7 +78,12 @@ function Main(props) {
     props.likePost(payload)
   }
 
-  const openCommentModal = () => {
+  const openCommentModal = (e) => {
+    if (e.target !== e.currentTarget) {
+      setShowArticleSettings(false);
+      return;
+    }
+
     switch(showCommentModal) {
       case false:
         setShowCommentModal(true);
@@ -87,6 +94,18 @@ function Main(props) {
       default:
         setShowCommentModal(false);
     }
+  }
+
+  const openArticleSettings = (e) => {
+    e.stopPropagation();
+
+    if (showArticleSettings) {
+      setShowArticleSettings(false);
+    } else {
+      setShowArticleSettings(true);
+    }
+
+    console.log(showArticleSettings);
   }
   return (
     <div>
@@ -125,7 +144,7 @@ function Main(props) {
           {props?.articles.length > 0 && 
           props.articles.map((article) => (
           <Article key={article.id}>
-            <SharedActor>
+            <SharedActor onBlur={() => setShowArticleSettings(false)}>
               <a>
                 <img src={article.actor.image} alt="" />
                 <div>
@@ -136,7 +155,8 @@ function Main(props) {
                   )}
                 </div>
               </a>
-              <button>
+              <button onClick={openArticleSettings}>
+                {showArticleSettings && <ArticleSettings/>}
                 <img src="/images/three-dots.svg" alt="" />
               </button>
             </SharedActor>
