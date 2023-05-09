@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getUserAuth, passwordSignInAPI } from '../actions';
 import { connect } from 'react-redux';
-import { useEffect } from 'react';
 
 function SignIn(props) {
     const [email, setEmail] = useState('');

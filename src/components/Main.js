@@ -6,7 +6,6 @@ import { getArticlesAPI, likePostAPI, switchAreaPhoto } from '../actions';
 import ReactPlayer from 'react-player';
 import CommentModal from './CommentModal';
 import Comment from './Comment';
-import ArticleSettings from './ArticleSettings';
 
 function Main(props) {
   const [showModal, setModal] = useState("close");
@@ -156,7 +155,7 @@ function Main(props) {
                 </div>
               </a>
               <button onClick={openArticleSettings}>
-                {showArticleSettings && <ArticleSettings/>}
+                {showArticleSettings && <DeleteButton/>}
                 <img src="/images/three-dots.svg" alt="" />
               </button>
             </SharedActor>
@@ -491,4 +490,26 @@ const Content = styled.div`
     height: 140px;
     object-fit: cover;
   }
+`;
+
+const DeleteButton = styled.div`
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background-color: rgba(0, 0, 0, .8);
+    color: white;
+    padding: 5px 20px;
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    &:hover {
+        background-color: rgba(0, 0, 0, .6);
+    }
+    &:after {
+      content: 'Delete Post';
+    }
 `;

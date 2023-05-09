@@ -1,6 +1,5 @@
-import firebase from 'firebase/app'
 import { initializeApp } from 'firebase/app'
-import { getFirestore, serverTimestamp, collection, getDocs, addDoc, getDoc, doc, orderBy, query, Timestamp } from 'firebase/firestore'
+import { getFirestore, serverTimestamp, collection, addDoc, getDoc, doc, orderBy, query, Timestamp } from 'firebase/firestore'
 import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { getStorage, ref, uploadBytes, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 
