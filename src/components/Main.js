@@ -576,6 +576,9 @@ const DeleteButton = styled.div`
     &:after {
       content: 'Delete Post';
     }
+    @media (max-width:768px) {
+      width: 80px;
+    }
 `;
 
 const DeleteWarning = styled.div`
@@ -600,6 +603,7 @@ const Card = styled.div`
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  margin: 0 10px;
   div {
     height: 100%;
     display: flex;
