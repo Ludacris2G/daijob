@@ -3,6 +3,10 @@ body {
   overflow-x: hidden;
 }
 
+.modal-open {
+  overflow: hidden;
+}
+
 :root,
 body,
 html {

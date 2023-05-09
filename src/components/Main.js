@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import PostModal from './PostModal'
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { getArticlesAPI, likePostAPI, switchAreaPhoto } from '../actions';
+import { deletePostAPI, getArticlesAPI, likePostAPI, switchAreaPhoto } from '../actions';
 import ReactPlayer from 'react-player';
 import CommentModal from './CommentModal';
 import Comment from './Comment';
@@ -12,9 +12,17 @@ function Main(props) {
   const [showPictureUpload, setShowPictureUpload] = useState('');
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [showArticleSettings, setShowArticleSettings] = useState(false);
-  
+  const [deleteWarning, setDeleteWarning] = useState(false);
+  const [articleDeletionId, setArticleDeletionId] = useState('');
+
   useEffect(() => {
-    props.getArticles()
+    props.getArticles();
+
+    if (deleteWarning) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
   }, []);
 
   const handleClick = (e) => {
@@ -103,8 +111,41 @@ function Main(props) {
     } else {
       setShowArticleSettings(true);
     }
+  }
 
-    console.log(showArticleSettings);
+  const handleDelete = (e, id) => {
+    e.preventDefault();
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+    if (deleteWarning) {
+      document.body.classList.remove('modal-open');
+      setDeleteWarning(false);
+      setArticleDeletionId('');
+    } else {
+      document.body.classList.add('modal-open');
+      setDeleteWarning(true);
+      setArticleDeletionId(id);
+    }
+  }
+
+  const handleOutsideClick = (event) => {
+    if (!event.target.closest('#delete-warning')) {
+      setDeleteWarning(false);
+    }
+  }
+
+  const deletePost = (e) => {
+    e.preventDefault();
+
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+    
+    setDeleteWarning(false);
+    setArticleDeletionId('');
+    document.body.classList.remove('modal-open');
+    props.deletePost(articleDeletionId);
   }
   return (
     <div>
@@ -145,7 +186,11 @@ function Main(props) {
           <Article key={article.id}>
             <SharedActor onBlur={() => setShowArticleSettings(false)}>
               <a>
-                <img src={article.actor.image} alt="" />
+                { article.actor.image ? (
+                  <img src={ article.actor.image } alt="" />
+                ) : (
+                  <img src={ '/images/nav-user.png' } alt="" />
+                )}
                 <div>
                   <span>{article.actor.title}</span>
                   <span>{article.actor.description}</span>
@@ -154,10 +199,12 @@ function Main(props) {
                   )}
                 </div>
               </a>
+              { props.user.email === article.actor.description &&
               <button onClick={openArticleSettings}>
-                {showArticleSettings && <DeleteButton/>}
+                {showArticleSettings && <DeleteButton onClick={(e) => handleDelete(e, article.id)} />}
                 <img src="/images/three-dots.svg" alt="" />
               </button>
+              }
             </SharedActor>
             <Description>
               {article.description}
@@ -219,6 +266,19 @@ function Main(props) {
             { article.comments > 0 && article.commentsUsers.map((comment, i) => (
               <Comment key={i} comment={comment}/>
             ))}
+            {deleteWarning && 
+            <DeleteWarning>
+              <div id='delete-warning' onClick={handleOutsideClick}>
+              <Card>
+                  <p>Are you sure you want to delete this post?</p>
+                  <div>
+                    <button onClick={(e) => deletePost(e)}>Yes</button>
+                    <button onClick={(e) => handleDelete(e)}>No</button>
+                  </div>
+              </Card>
+              </div>
+            </DeleteWarning>
+            }
           </Article>
         ))}
         </Content>
@@ -239,6 +299,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   getArticles: () => dispatch(getArticlesAPI()),
   likePost: (payload) => dispatch(likePostAPI(payload)),
+  deletePost: (payload) => dispatch(deletePostAPI(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
@@ -385,6 +446,9 @@ const SharedActor = styled.div`
     background: transparent;
     border: none;
     outline: none;
+    img {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -512,4 +576,48 @@ const DeleteButton = styled.div`
     &:after {
       content: 'Delete Post';
     }
+`;
+
+const DeleteWarning = styled.div`
+  background-color: rgba(0, 0, 0, .7);
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  p {
+    font-size: 1rem;
+  }
+`;
+
+const Card = styled.div`
+  background-color: #e3e3e3e8;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    button {
+      padding: 5px 12px;
+      background-color: #0a66c2;
+      border: none;
+      border-radius: 5px;
+      width: 60px;
+      height: 30px;
+      margin: 0 5px;
+      color: white;
+      &:first-child {
+        background-color: #4f4949b3;
+      }
+    }
+  }
 `;

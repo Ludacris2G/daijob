@@ -1,9 +1,9 @@
 import firebase from 'firebase/app'
-import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy, query, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from '../firebase'
+import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy, query, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteDoc } from '../firebase'
 import { onSnapshot, updateDoc } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -27,6 +27,11 @@ export const likePost = (payload) => ({
 
 export const commentPost = (payload) => ({
   type: COMMENT_POST,
+  payload: payload,
+})
+
+export const deletePost = (payload) => ({
+  type: DELETE_POST,
   payload: payload,
 })
 
@@ -240,4 +245,18 @@ export function postCommentAPI(payload) {
         }
       })
   }
+}
+
+export function deletePostAPI(id) {
+  return (dispatch) => {
+    const articleRef = doc(db, 'articles', id);
+
+    deleteDoc(articleRef)
+      .then(() => {
+        dispatch(deletePost(id));
+      })
+      .catch((error) => {
+        alert('Error deleting document:', error);
+      });
+  };
 }
