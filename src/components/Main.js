@@ -11,7 +11,7 @@ function Main(props) {
   const [showModal, setModal] = useState("close");
   const [showPictureUpload, setShowPictureUpload] = useState('');
   const [showCommentModal, setShowCommentModal] = useState(false);
-  const [showArticleSettings, setShowArticleSettings] = useState(false);
+  const [showArticleSettings, setShowArticleSettings] = useState(Array(props.articles.length).fill(false));
   const [deleteWarning, setDeleteWarning] = useState(false);
   const [articleDeletionId, setArticleDeletionId] = useState('');
 
@@ -103,21 +103,24 @@ function Main(props) {
     }
   }
 
-  const openArticleSettings = (e) => {
-    e.stopPropagation();
-
-    if (showArticleSettings) {
-      setShowArticleSettings(false);
-    } else {
-      setShowArticleSettings(true);
-    }
-  }
-
-  const handleDelete = (e, id) => {
+  const openArticleSettings = (i, e) => {
     e.preventDefault();
     if (e.target !== e.currentTarget) {
       return;
     }
+    
+    const updatedSettings = [...showArticleSettings];
+    updatedSettings[i] = true;
+    setShowArticleSettings(updatedSettings);
+  }
+
+  const handleDelete = (id, i) => {
+    setShowArticleSettings((prevState) => {
+      const updatedSettings = [...prevState];
+      updatedSettings[i] = false;
+      return updatedSettings;
+    });
+
     if (deleteWarning) {
       document.body.classList.remove('modal-open');
       setDeleteWarning(false);
@@ -182,9 +185,9 @@ function Main(props) {
         <Content>
           {props.loading && <img className='loading' src="/images/loading.gif" alt="" />}
           {props?.articles.length > 0 && 
-          props.articles.map((article) => (
+          props.articles.map((article, index) => (
           <Article key={article.id}>
-            <SharedActor onBlur={() => setShowArticleSettings(false)}>
+            <SharedActor onBlur={() => setShowArticleSettings(showArticleSettings.map((value, i) => i === index ? false : value))}>
               <a>
                 { article.actor.image ? (
                   <img src={ article.actor.image } alt="" />
@@ -200,8 +203,8 @@ function Main(props) {
                 </div>
               </a>
               { props.user.email === article.actor.description &&
-              <button onClick={openArticleSettings}>
-                {showArticleSettings && <DeleteButton onClick={(e) => handleDelete(e, article.id)} />}
+              <button onClick={(e) => openArticleSettings(index, e)}>
+                {showArticleSettings[index] && <DeleteButton onClick={() => handleDelete(article.id, index)} />}
                 <img src="/images/three-dots.svg" alt="" />
               </button>
               }
@@ -448,6 +451,7 @@ const SharedActor = styled.div`
     outline: none;
     img {
       cursor: pointer;
+      pointer-events: none;
     }
   }
 `;
