@@ -121,13 +121,6 @@ const PostModal = (props) => {
                                 <img src="/images/video-icon.png" alt="" />
                             </AssetButton>
                         </AttachAssets>
-
-                        {/* <ShareComment>
-                            <AssetButton>
-                                <img src="/images/megaphone.png" alt="" />
-                                Anyone
-                            </AssetButton>
-                        </ShareComment> */}
                         <PostButton disabled={!editorText} onClick={(e) => postArticle(e)}>
                             Post
                         </PostButton>

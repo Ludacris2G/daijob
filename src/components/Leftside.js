@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components'
 
 function Leftside(props) {
+  console.log(props.user.photoURL)
   return (
     <div>
       <Container>
@@ -9,7 +10,11 @@ function Leftside(props) {
           <UserInfo>
             <CardBackground />
             <a>
-              <Photo />
+                {props.user.photoURL ? (
+                <img src={props.user.photoURL} alt="" />
+                ) : (
+                  <img src="images/camera.png" alt="" />
+                )}
               <Link> Welcome, 
               {props.user ? ' ' + props.user?.displayName + '!' : 'there!'}</Link>
             </a>
@@ -85,6 +90,21 @@ const UserInfo = styled.div`
   padding: 12px 12px 16px;
   word-wrap: break-word;
   word-break: break-word;
+  img {
+    box-shadow: none;
+    width: 72px;
+    height: 72px;
+    background-size: 60%;
+    background-position: center;
+    box-sizing: border-box;
+    background-clip: content-box;
+    background-color: white;
+    background-repeat: no-repeat;
+    border: 2px solid white;
+    margin: -38px auto 12px;
+    border-radius: 50%;
+    object-fit: contain;
+  }
 `;
 
 const CardBackground = styled.div`
@@ -93,22 +113,6 @@ const CardBackground = styled.div`
   background-size: 462px;
   height: 54px;
   margin: -12px -12px 0;
-`;
-
-const Photo = styled.div`
-  box-shadow: none;
-  background-image: url('/images/camera.png');
-  width: 72px;
-  height: 72px;
-  background-size: 60%;
-  background-position: center;
-  box-sizing: border-box;
-  background-clip: content-box;
-  background-color: white;
-  background-repeat: no-repeat;
-  border: 2px solid white;
-  margin: -38px auto 12px;
-  border-radius: 50%;
 `;
 
 const Link = styled.div`

@@ -109,9 +109,11 @@ function Main(props) {
       return;
     }
     
-    const updatedSettings = [...showArticleSettings];
-    updatedSettings[i] = true;
-    setShowArticleSettings(updatedSettings);
+    setShowArticleSettings((prevState) => {
+      const updatedSettings = [...prevState];
+      updatedSettings[i] = !updatedSettings[i];
+      return updatedSettings;
+    });
   }
 
   const handleDelete = (id, i) => {
@@ -203,8 +205,11 @@ function Main(props) {
                 </div>
               </a>
               { props.user.email === article.actor.description &&
-              <button onClick={(e) => openArticleSettings(index, e)}>
-                {showArticleSettings[index] && <DeleteButton onClick={() => handleDelete(article.id, index)} />}
+              <button 
+                onClick={(e) => openArticleSettings(index, e)}
+              >
+                {showArticleSettings[index] && <DeleteButton onClick={() => handleDelete(article.id, index)} 
+                />}
                 <img src="/images/three-dots.svg" alt="" />
               </button>
               }
@@ -441,7 +446,6 @@ const SharedActor = styled.div`
       }
     }
   }
-
   button {
     position: absolute;
     right: 12px;
@@ -574,6 +578,7 @@ const DeleteButton = styled.div`
     cursor: pointer;
     display: flex;
     align-items: center;
+    transition: opacity .3s ease;
     &:hover {
         background-color: rgba(0, 0, 0, .6);
     }

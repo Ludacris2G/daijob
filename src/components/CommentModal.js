@@ -79,10 +79,10 @@ const Container = styled.div`
 const Textarea = styled.textarea`
     font-size: 14px;
     width: 100%;
-    min-height: 20px;
+    height: 20px;
     resize: none;
     border: 1px solid rgba(0, 0, 0, .15);
-    border-radius: 10px;
+    border-radius: 20px;
     outline: none;
-    padding: 4px 6px;
+    padding: 8px 8px;
 `;
