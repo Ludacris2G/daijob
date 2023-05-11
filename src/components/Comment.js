@@ -7,8 +7,6 @@ import { deleteCommentAPI } from '../actions';
 
 function Comment(props) {
     const [settingsWindow, setSettingsWindow] = useState(false);
-    // console.log(props.user.email, props.article.commentsUsers);
-    // comment, name, email, photo, timestamp
     const deleteComment = (comment, article, email) => {
 
         const payload = {
@@ -19,6 +17,15 @@ function Comment(props) {
 
         props.deleteComment(payload);
     }
+
+    // find better fix
+    const handleBlur = () => {
+        if (settingsWindow) {
+          setTimeout(() => {
+            setSettingsWindow(false);
+          }, 90);
+        }
+    };
 
   return (
     <Container>
@@ -36,17 +43,19 @@ function Comment(props) {
                     <small>{ props.comment.email }</small>
                 </span>
                 <p>{ props.comment.comment }</p>
-                <CommentOptions>
+                <CommentOptions onBlur={handleBlur}>
                     <p>{ moment.unix(props.comment.timestamp.seconds).fromNow() }</p>
                     <div>
-                    {props.comment?.email === props?.email && 
-                    // add on blur here ->>>>>>>>>>>
-                    <button onClick={() => setSettingsWindow(!settingsWindow)}>
-                        <img src="/images/three-dots.svg" alt="3 dots" />
-                    </button>
-                    }
+                        {props.comment?.email === props?.email && 
+                        // add on blur here ->>>>>>>>>>>
+                        <button 
+                        onClick={() => setSettingsWindow(!settingsWindow)}>
+                            <img src="/images/three-dots.svg" alt="3 dots" />
+                        </button>
+                        }
                     </div>
-                    {settingsWindow && <SettingsButton onClick={() => deleteComment(props.comment, props.article, props.user.email)}/>}
+                    {settingsWindow && <SettingsButton
+                    onClick={() => deleteComment(props.comment, props.article, props.user.email)}/>}
                 </CommentOptions>
             </TextBoxContainer>
         </CommentBody>

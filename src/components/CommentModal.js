@@ -12,7 +12,6 @@ function CommentModal(props) {
         if (e.target !== e.currentTarget) {
             return;
         }
-        // be careful to add a default picture
         const payload = {
             comment: {
                 comment: comment,
