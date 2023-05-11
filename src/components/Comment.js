@@ -1,9 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
+import { connect } from 'react-redux';
+import { useState } from 'react';
+import { deleteCommentAPI } from '../actions';
 
 function Comment(props) {
+    const [settingsWindow, setSettingsWindow] = useState(false);
+    // console.log(props.user.email, props.article.commentsUsers);
     // comment, name, email, photo, timestamp
+    const deleteComment = (comment, article, email) => {
+
+        const payload = {
+            articleId: article.id,
+            timestamp: comment.timestamp.seconds,
+            email: email,
+        }
+
+        props.deleteComment(payload);
+    }
+
   return (
     <Container>
         <CommentBody>
@@ -22,13 +38,33 @@ function Comment(props) {
                 <p>{ props.comment.comment }</p>
                 <CommentOptions>
                     <p>{ moment.unix(props.comment.timestamp.seconds).fromNow() }</p>
-                    <img src="/images/three-dots.svg" alt="3 dots" />
+                    <div>
+                    {props.comment?.email === props?.email && 
+                    // add on blur here ->>>>>>>>>>>
+                    <button onClick={() => setSettingsWindow(!settingsWindow)}>
+                        <img src="/images/three-dots.svg" alt="3 dots" />
+                    </button>
+                    }
+                    </div>
+                    {settingsWindow && <SettingsButton onClick={() => deleteComment(props.comment, props.article, props.user.email)}/>}
                 </CommentOptions>
             </TextBoxContainer>
         </CommentBody>
     </Container>
   )
 }
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.userState.user,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    deleteComment: (payload) => dispatch(deleteCommentAPI(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comment);
 
 const Container = styled.div`
     display: flex;
@@ -85,6 +121,45 @@ const CommentOptions = styled.div`
     p {
         font-size:8px;
     }
+    div {
+        button {
+            right: 12px;
+            top: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            img {
+            cursor: pointer;
+            pointer-events: none;
+            }
+        }
+    }
 `;
 
-export default Comment
+const SettingsButton = styled.button`
+    position: absolute;
+    top: 15px;
+    right: 0;
+    background-color: rgba(0, 0, 0, .8);
+    color: white;
+    padding: 5px 20px;
+    width: 200px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity .3s ease;
+    &:hover {
+        background-color: rgba(0, 0, 0, .6);
+    }
+    &:after {
+      content: 'Delete comment';
+    }
+    @media (max-width:768px) {
+      width: 80px;
+    }
+`;

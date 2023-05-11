@@ -4,3 +4,4 @@ export const GET_ARTICLES = 'GET_ARTICLES';
 export const LIKE_POST = 'LIKE_POST';
 export const COMMENT_POST = 'COMMENT_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const DELETE_COMMENT = 'DELETE_COMMENT';

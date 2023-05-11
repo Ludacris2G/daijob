@@ -3,7 +3,7 @@ import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorag
 import { onSnapshot, updateDoc } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -23,10 +23,15 @@ export const getArticles = (payload) => ({
 export const likePost = (payload) => ({
   type: LIKE_POST,
   payload: payload,
-})
+});
 
 export const commentPost = (payload) => ({
   type: COMMENT_POST,
+  payload: payload,
+});
+
+export const deleteComment = (payload) => ({
+  type: DELETE_COMMENT,
   payload: payload,
 })
 
@@ -259,4 +264,26 @@ export function deletePostAPI(id) {
         alert('Error deleting document:', error);
       });
   };
+}
+
+export function deleteCommentAPI(payload) {
+  return (dispatch) => {
+    const articleRef = doc(db, 'articles', payload.articleId);
+    getDoc(articleRef)
+      .then((doc) => {
+        if (doc.exists()) {
+          const articleData = doc.data();
+          const commentsUsers = articleData.commentsUsers;
+          console.log(commentsUsers);
+          const newCommentsUsers = commentsUsers.filter((comment) => {
+            return  comment.email !== payload.email || comment.timestamp.seconds !== payload.timestamp;
+          })
+          const newCommentCount = articleData.comments - 1;
+          updateDoc(articleRef, { commentsUsers: newCommentsUsers, comments: newCommentCount})
+          .then(() => {
+            dispatch(deleteComment({ commentsUsers: newCommentsUsers, comments: newCommentCount}));
+          })
+        }
+      })
+  }
 }

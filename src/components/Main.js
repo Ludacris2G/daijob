@@ -204,7 +204,7 @@ function Main(props) {
                   )}
                 </div>
               </a>
-              { props.user.email === article.actor.description &&
+              { props.user?.email === article.actor?.description &&
               <button 
                 onClick={(e) => openArticleSettings(index, e)}
               >
@@ -272,7 +272,7 @@ function Main(props) {
             </SocialActions>
             { showCommentModal && (<CommentModal id={article.id}/>)}
             { article.comments > 0 && article.commentsUsers.map((comment, i) => (
-              <Comment key={i} comment={comment}/>
+              <Comment key={i} comment={comment} email={props.user?.email} article={article}/>
             ))}
             {deleteWarning && 
             <DeleteWarning>

@@ -1,4 +1,4 @@
-import { SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST } from "../actions/actionType";
+import { SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT } from "../actions/actionType";
 
 export const initState = {
     articles: [],
@@ -59,6 +59,19 @@ const articleReducer = (state = initState, action) => {
             return {
                 ...state,
                 articles: postDeletionArticles,
+            }
+        case DELETE_COMMENT:
+            const { commentsUsers, newCommentCount } = action.payload;
+            const updatedArticlesData = state.articles.filter((article) => {
+                return {
+                    ...article,
+                    comments: newCommentCount,
+                    commentsUsers: commentsUsers,
+                }
+            })
+            return {
+                ...state,
+                articles: updatedArticlesData,
             }
         default:
             return state;

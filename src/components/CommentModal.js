@@ -29,8 +29,8 @@ function CommentModal(props) {
     };
   return (
     <Container>
-        { props.user.photoURL ? (
-        <img src={props.user.photoURL}/>) : (
+        { props.user?.photoURL ? (
+        <img src={props.user?.photoURL}/>) : (
         <img src='/images/nav-user.png'/>
         )}
         <Textarea value={comment} onChange={(e) => setComment(e.target.value)} placeholder='say something nice'/>

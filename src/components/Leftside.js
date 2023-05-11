@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import styled from 'styled-components'
 
 function Leftside(props) {
-  console.log(props.user.photoURL)
   return (
     <div>
       <Container>
@@ -10,10 +9,10 @@ function Leftside(props) {
           <UserInfo>
             <CardBackground />
             <a>
-                {props.user.photoURL ? (
-                <img src={props.user.photoURL} alt="" />
+                {props.user?.photoURL ? (
+                <img src={props.user?.photoURL} alt="" />
                 ) : (
-                  <img src="images/camera.png" alt="" />
+                  <img src="images/nav-user.png" alt="" />
                 )}
               <Link> Welcome, 
               {props.user ? ' ' + props.user?.displayName + '!' : 'there!'}</Link>
