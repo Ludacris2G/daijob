@@ -1,15 +1,93 @@
 import React from 'react'
+import { useEffect } from 'react';
+import { useRef } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 function Messaging(props) {
-    console.log(props)
   return (
     <Container>
         <Chat>
-            <p>Join the discussion!</p>
             <ChatLog>
-                Messages
+                <img className='chat-background' src="/images/背景2.jpg" alt="" />
+                    <Message>
+                        { props.user?.photoURL ? (
+                            <img src={props.user?.photoURL}/>
+                        ) : (
+                            <img src='/images/nav-user.png'/>
+                        )}
+                        <MessageBody>
+                            <div>
+                            <h2>Liviu</h2>
+                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates ipsum ducimus id officiis ex, consequatur doloremque quae exercitationem corporis iure natus cum a ad saepe vitae, et quas! Culpa, assumenda!</p>
+                            </div>
+                        </MessageBody>
+                    </Message>
+                    <Message>
+                        { props.user?.photoURL ? (
+                            <img src={props.user?.photoURL}/>
+                        ) : (
+                            <img src='/images/nav-user.png'/>
+                        )}
+                        <MessageBody>
+                            <div>
+                            <h2>Liviu</h2>
+                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates ipsum ducimus id officiis ex, consequatur doloremque quae exercitationem corporis iure natus cum a ad saepe vitae, et quas! Culpa, assumenda!</p>
+                            </div>
+                        </MessageBody>
+                    </Message>
+                    <Message>
+                        { props.user?.photoURL ? (
+                            <img src={props.user?.photoURL}/>
+                        ) : (
+                            <img src='/images/nav-user.png'/>
+                        )}
+                        <MessageBody>
+                            <div>
+                            <h2>Liviu</h2>
+                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates ipsum ducimus id officiis ex, consequatur doloremque quae exercitationem corporis iure natus cum a ad saepe vitae, et quas! Culpa, assumenda!</p>
+                            </div>
+                        </MessageBody>
+                    </Message>
+                    <Message>
+                        { props.user?.photoURL ? (
+                            <img src={props.user?.photoURL}/>
+                        ) : (
+                            <img src='/images/nav-user.png'/>
+                        )}
+                        <MessageBody>
+                            <div>
+                            <h2>Liviu</h2>
+                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates ipsum ducimus id officiis ex, consequatur doloremque quae exercitationem corporis iure natus cum a ad saepe vitae, et quas! Culpa, assumenda!</p>
+                            </div>
+                        </MessageBody>
+                    </Message>
+                    <Message>
+                        { props.user?.photoURL ? (
+                            <img src={props.user?.photoURL}/>
+                        ) : (
+                            <img src='/images/nav-user.png'/>
+                        )}
+                        <MessageBody>
+                            <div>
+                            <h2>Liviu</h2>
+                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates ipsum ducimus id officiis ex, consequatur doloremque quae exercitationem corporis iure natus cum a ad saepe vitae, et quas! Culpa, assumenda!</p>
+                            </div>
+                        </MessageBody>
+                    </Message>
+                    <Message>
+                        { props.user?.photoURL ? (
+                            <img src={props.user?.photoURL}/>
+                        ) : (
+                            <img src='/images/nav-user.png'/>
+                        )}
+                        <MessageBody>
+                            <div>
+                            <h2>Liviu</h2>
+                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates ipsum ducimus id officiis ex, consequatur doloremque quae exercitationem corporis iure natus cum a ad saepe vitae, et quas! Culpa, assumenda!123</p>
+                            </div>
+                        </MessageBody>
+                    </Message>
             </ChatLog>
             <MessageInput>
                 { props.user ? (
@@ -45,29 +123,13 @@ const Container = styled.div`
 `;
 
 const Chat = styled.div`
-    display: flex;
-    flex-direction: column;
-    background-color: slateblue;
-    position: absolute;
-    bottom: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 100%;
-    width: 70%;
-    justify-content: flex-end;
 `;
 
 const MessageInput = styled.div`
-    /* background-color: blue;
-    height: 35px;
-    position: absolute;
-    bottom: 78px;
-    display: flex;
-    width: 100%;
-    align-items: center; */
     display: flex;
     justify-content: space-between;
     height: 40px;
+    margin-top: 5px;
     img {
         border-radius: 50%;
     }
@@ -84,23 +146,47 @@ const MessageInput = styled.div`
 `;
 
 const Textarea = styled.textarea`
-    /* align-items: center;
-    font-size: 16px;
-    width: 100%;
-    height: 100%;
-    resize: none;
-    border: 1px solid rgba(0, 0, 0, .15);
-    border-radius: 50px;
-    outline: none;
-    margin: 0 3px;
-   line-height: 2; */
    resize: none;
    width: 100%;
    border-radius: 50px;
+   line-height: 2.5;
 `;
 
 const ChatLog = styled.div`
-    background-color: steelblue;
-    height: 100%;
-    border-radius: 20px;
+    position: relative;
+    height: 400px;
+    overflow: auto;
+    .chat-background {
+        position: fixed;
+        object-fit: cover;
+        bottom: 0;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+`;
+
+const Message = styled.div`
+    display: flex;
+    align-items: center;
+    margin: 5px;
+    img {
+        width: 50px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+`;
+
+const MessageBody = styled.div`
+    div {  
+        padding: 5px 10px;
+        background-color: #f4f4f4;
+        border-radius: 20px;
+        color: rgba(0, 0, 0, .7);
+        font-size: 14px;
+        h2 {
+            color: #000;
+        }
+    }
 `;
