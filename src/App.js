@@ -10,6 +10,7 @@ import Join from './components/Join'
 import SignIn from './components/SignIn'
 import { auth } from './firebase'
 import { useState } from 'react'
+import Messaging from './components/Messaging'
 
 function App(props) {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +39,7 @@ function App(props) {
         <Route path='/home' element={[<Header key='header'/>, <Home key='home'/>]}/>
         <Route path='/join' element={[<Join key='join'/>]}/>
         <Route path='/signin' element={[<SignIn key='signin'/>]}/>
+        <Route path='/messaging' element={[<Header key='header'/>,<Messaging key='messaging'/>]}/>
       </Routes>
     </div>
     </Router>

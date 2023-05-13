@@ -4,6 +4,8 @@ import Main from './Main'
 import Rightside from './Rightside'
 import { Navigate } from 'react-router-dom'
 import { connect } from 'react-redux'
+import Header from './Header'
+import Messaging from './Messaging'
 
 function Home(props) {
     return (

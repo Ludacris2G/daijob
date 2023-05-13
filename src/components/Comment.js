@@ -162,6 +162,7 @@ const SettingsButton = styled.button`
     align-items: center;
     justify-content: center;
     transition: opacity .3s ease;
+    border: none;
     &:hover {
         background-color: rgba(0, 0, 0, .6);
     }

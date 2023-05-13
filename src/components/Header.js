@@ -3,8 +3,10 @@ import { signOutAPI } from '../actions';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useState } from 'react';
 
 function Header(props) {
+
   return (
     <Container>
         <Content>
@@ -23,13 +25,15 @@ function Header(props) {
             </Search>
             <Nav>
                 <NavListWrap>
-                    <NavList className='active'>
-                        <a href="/home">
+                    <NavList id='button1'>
+                        <a 
+                            href="/home"
+                        >
                             <img src="/images/nav-home.png" alt="" />
                             <span>Home</span>
                         </a>
                     </NavList>
-                    <NavList>
+                    {/* <NavList>
                         <a href="/home">
                             <img src="/images/nav-network.png" alt="" />
                             <span>My Network</span>
@@ -40,19 +44,21 @@ function Header(props) {
                             <img src="/images/nav-jobs.png" alt="" />
                             <span>Jobs</span>
                         </a>
-                    </NavList>
-                    <NavList>
-                        <a href="/home">
+                    </NavList> */}
+                    <NavList id='button2'>
+                        <a 
+                            href='/messaging'
+                        >
                             <img src="/images/nav-messaging.png" alt="" />
                             <span>Messaging</span>
                         </a>
                     </NavList>
-                    <NavList>
+                    {/* <NavList>
                         <a href="/home">
                             <img src="/images/nav-notifications.png" alt="" />
                             <span>Notifications</span>
                         </a>
-                    </NavList>
+                    </NavList> */}
 
                     <User>
                         <a>
@@ -72,14 +78,14 @@ function Header(props) {
                         </SignOut>
                     </User>
 
-                    <Work>
+                    {/* <Work>
                         <a>
                             <img src="/images/nav-work.png" alt="" />
                             <span>Work
                                 <img className='dropdown-img' src="/images/down-arrow.svg" alt="" />
                             </span>
                         </a>
-                    </Work>
+                    </Work> */}
                 </NavListWrap>
             </Nav>
         </Content>
