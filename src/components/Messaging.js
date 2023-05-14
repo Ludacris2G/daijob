@@ -95,12 +95,19 @@ const Container = styled.div`
     height: 98vh -5px;
     width: 100vw;
     justify-content: center;
+    @media (max-width: 768px) {
+        grid-template-columns: auto;
+        width: 100%;
+    }
 `;
 
 const Chat = styled.div`
     padding-top: 62px;
     display: flex;
     flex-direction: column;
+    @media (max-width:768px) {
+        padding-top: 35px;
+    }
 `;
 
 const MessageInput = styled.div`
@@ -129,7 +136,6 @@ const Textarea = styled.textarea`
    resize: none;
    width: 100%;
    border-radius: 50px;
-   line-height: 2.8;
    padding: 0 10px;
    margin: 0 6px;
 `;
@@ -145,6 +151,9 @@ const ChatLog = styled.div`
   border: 1px solid white;
   overflow-y: scroll;
   border-radius: 15px;
+  @media (max-width:768px) {
+    height: calc(100vh - 165px);
+  }
 `;
 
 const Message = styled.div`
