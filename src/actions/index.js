@@ -1,9 +1,9 @@
 import firebase from 'firebase/app'
-import { auth, provider, signInWithPopup, storage, GoogleAuthProvider, getStorage, collection, addDoc, serverTimestamp, uploadBytesResumable, doc, getDoc, orderBy, query, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteDoc } from '../firebase'
+import { auth, provider, signInWithPopup, storage, collection, addDoc, uploadBytesResumable, doc, getDoc, orderBy, query, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteDoc } from '../firebase'
 import { onSnapshot, updateDoc } from 'firebase/firestore'
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { ref, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT, POST_MESSAGE, GET_MESSAGES } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -37,6 +37,16 @@ export const deleteComment = (payload) => ({
 
 export const deletePost = (payload) => ({
   type: DELETE_POST,
+  payload: payload,
+})
+
+export const postMessage = (payload) => ({
+  type: POST_MESSAGE,
+  payload: payload,
+})
+
+export const getMessages = (payload) => ({
+  type: GET_MESSAGES,
   payload: payload,
 })
 
@@ -285,5 +295,30 @@ export function deleteCommentAPI(payload) {
           })
         }
       })
+  }
+}
+
+export function sendMessageAPI(payload) {
+  return (dispatch) => {
+    const messagesRef = collection(db, 'messages');
+    console.log(payload);
+    addDoc(messagesRef, payload)
+      .then((docRef) => {
+      })
+  }
+}
+
+export function getMessagesAPI(payload) {
+  return (dispatch) => {
+    const messagesRef = collection(db, 'messages');
+    const q = query(messagesRef, orderBy('time', 'asc'));
+    const unsub = onSnapshot(q, orderBy('time', 'asc'), (querySnapshot) => {
+      payload = querySnapshot.docs.map((doc) => {
+        const message = doc.data();
+        message.id = doc.id;
+        return message;
+      });
+      dispatch(getMessages(payload));
+    })
   }
 }

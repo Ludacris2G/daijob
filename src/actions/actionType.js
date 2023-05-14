@@ -5,3 +5,5 @@ export const LIKE_POST = 'LIKE_POST';
 export const COMMENT_POST = 'COMMENT_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
+export const POST_MESSAGE = 'POST_MESSAGE';
+export const GET_MESSAGES = 'GET_MESSAGES';

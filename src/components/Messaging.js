@@ -4,15 +4,40 @@ import { useState } from 'react';
 import { useRef } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { getMessagesAPI, sendMessageAPI } from '../actions';
+import { serverTimestamp } from 'firebase/firestore';
 
 function Messaging(props) {
     const [messageText, setMessageText] = useState('');
+
+    const sendMessage = (text) => {
+        const payload = {
+            text: text,
+            name: props.user.displayName,
+            photo: props.user.photoURL,
+            time: serverTimestamp(),
+        }
+        props.sendMessage(payload);
+    }
+
+    useEffect(() => {
+        props.getMessages();
+    }, []);
+
+    const handleKeyDown = (event) => {
+        console.log(event)
+        if (event.key === 'Enter') {
+          event.preventDefault(); // Prevent the default behavior of Enter key
+          sendMessage(messageText);
+        }
+    };
 
   return (
     <Container>
         <Chat>
             <ChatLog>
-                    <Message>
+                    {props.messages.map((message) => (
+                    <Message key={message.id}>
                         { props.user?.photoURL ? (
                             <img src={props.user?.photoURL}/>
                         ) : (
@@ -20,11 +45,12 @@ function Messaging(props) {
                         )}
                         <MessageBody>
                             <div>
-                            <h2>Liviu</h2>
-                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptates ipsum ducimus id officiis ex, consequatur doloremque quae exercitationem corporis iure natus cum a ad saepe vitae, et quas! Culpa, assumenda!123</p>
+                            <h2>{message.name}</h2>
+                                <p>{message.text}</p>
                             </div>
                         </MessageBody>
                     </Message>
+                    ))}
             </ChatLog>
             <MessageInput>
                 { props.user ? (
@@ -32,8 +58,17 @@ function Messaging(props) {
                 ) : (
                     <img src='/images/nav-user.png'/>
                 )}
-                <Textarea placeholder='Start a conversation..'/>
-                <button>Send</button>
+                <Textarea 
+                    value={messageText} 
+                    placeholder='Start a conversation..'
+                    onChange={(e) => setMessageText(e.target.value)}
+                />
+                <button 
+                    onClick={() => sendMessage(messageText)}
+                    onKeyDown={handleKeyDown}
+                >
+                    Send
+                </button>
             </MessageInput>
         </Chat>
     </Container>
@@ -43,11 +78,13 @@ function Messaging(props) {
 const mapStateToProps = (state) => {
     return {
         user: state.userState.user,
+        messages: state.messageState.messages,
     };
 };
 
 const mapDispatchToProps = (dispatch) =>({
-
+    sendMessage: (payload) => dispatch(sendMessageAPI(payload)),
+    getMessages: () => dispatch(getMessagesAPI()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Messaging);
@@ -92,7 +129,9 @@ const Textarea = styled.textarea`
    resize: none;
    width: 100%;
    border-radius: 50px;
-   line-height: 2.5;
+   line-height: 2.8;
+   padding: 0 10px;
+   margin: 0 6px;
 `;
 
 const ChatLog = styled.div`
