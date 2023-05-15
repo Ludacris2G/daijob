@@ -193,6 +193,7 @@ const Form = styled.div`
 `;
 
 const Google = styled.button`
+  cursor: pointer;
   display: flex;
   justify-content: center;
   background-color: #fff;

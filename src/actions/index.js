@@ -311,7 +311,7 @@ export function sendMessageAPI(payload) {
 export function getMessagesAPI(payload) {
   return (dispatch) => {
     const messagesRef = collection(db, 'messages');
-    const q = query(messagesRef, orderBy('time', 'asc'));
+    const q = query(messagesRef, orderBy('time', 'desc'));
     const unsub = onSnapshot(q, orderBy('time', 'asc'), (querySnapshot) => {
       payload = querySnapshot.docs.map((doc) => {
         const message = doc.data();

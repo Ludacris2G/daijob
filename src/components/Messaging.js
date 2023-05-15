@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { getMessagesAPI, sendMessageAPI } from '../actions';
 import { serverTimestamp } from 'firebase/firestore';
+import { Navigate } from 'react-router-dom';
 
 function Messaging(props) {
     const [messageText, setMessageText] = useState('');
@@ -14,10 +15,11 @@ function Messaging(props) {
         const payload = {
             text: text,
             name: props.user.displayName,
-            photo: props.user.photoURL,
+            photo: props.user?.photoURL,
             time: serverTimestamp(),
         }
         props.sendMessage(payload);
+        setMessageText('');
     }
 
     useEffect(() => {
@@ -29,11 +31,13 @@ function Messaging(props) {
         if (event.key === 'Enter') {
           event.preventDefault(); // Prevent the default behavior of Enter key
           sendMessage(messageText);
+          setMessageText('');
         }
     };
 
   return (
     <Container>
+        { !props?.user && <Navigate to='/'/>}
         <Chat>
             <ChatLog>
                     {props.messages.map((message) => (
@@ -64,6 +68,7 @@ function Messaging(props) {
                     onChange={(e) => setMessageText(e.target.value)}
                 />
                 <button 
+                    disabled={!messageText}
                     onClick={() => sendMessage(messageText)}
                     onKeyDown={handleKeyDown}
                 >
@@ -107,6 +112,7 @@ const Chat = styled.div`
     flex-direction: column;
     @media (max-width:768px) {
         padding-top: 35px;
+        margin-bottom: 71px;
     }
 `;
 
@@ -136,7 +142,7 @@ const Textarea = styled.textarea`
    resize: none;
    width: 100%;
    border-radius: 50px;
-   padding: 0 10px;
+   padding: 11px 10px;
    margin: 0 6px;
 `;
 
@@ -151,6 +157,8 @@ const ChatLog = styled.div`
   border: 1px solid white;
   overflow-y: scroll;
   border-radius: 15px;
+  display: flex;
+  flex-direction: column-reverse;
   @media (max-width:768px) {
     height: calc(100vh - 165px);
   }
