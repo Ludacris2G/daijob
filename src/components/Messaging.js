@@ -52,7 +52,7 @@ function Messaging(props) {
           setMessageText('');
         }
     };
-console.log(props.messages)
+console.log(props.user)
   return (
     <Container>
         { !props?.user && <Navigate to='/'/> }
@@ -62,13 +62,13 @@ console.log(props.messages)
                     {props.messages.map((message, i) => (
                     <Message key={message.id}>
                         { props.user?.uid === message.userId  ? (
-                            <img src={props.user?.photoURL || '/images/nav-user.png'}/>
+                            <img src={message?.photo}/>
                         ) : (
                             <img src={message.photo || '/images/nav-user.png'}/>
                         )}
                         <MessageBody>
                             <div>
-                            <h2>{message.name}</h2>
+                            <h2>{message.name === props.user.displayName ? 'Me' : message.name}</h2>
                                 <p>{message.text}</p>
                             </div>
                         </MessageBody>
