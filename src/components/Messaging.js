@@ -1,51 +1,70 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useRef } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { getMessagesAPI, sendMessageAPI } from '../actions';
 import { serverTimestamp } from 'firebase/firestore';
 import { Navigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 function Messaging(props) {
     const [messageText, setMessageText] = useState('');
+    const messagesContainerRef = useRef(null);
+
 
     const sendMessage = (text) => {
         const payload = {
             text: text,
             name: props.user.displayName,
             photo: props.user?.photoURL,
+            userId: props.user.uid,
             time: serverTimestamp(),
         }
         props.sendMessage(payload);
         setMessageText('');
     }
 
+    const scrollToBottom = () => {
+        if (messagesContainerRef.current) {
+          messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+      };
+
     useEffect(() => {
         props.getMessages();
+        scrollToBottom();
     }, []);
 
+    useEffect(() => {
+        if (props.messages.length > 0) {
+          scrollToBottom(); // Scroll to the bottom when new messages are added
+        }
+      }, [props.messages]);
+
     const handleKeyDown = (event) => {
-        console.log(event)
+        if (!messageText) {
+            return;
+        }
         if (event.key === 'Enter') {
           event.preventDefault(); // Prevent the default behavior of Enter key
           sendMessage(messageText);
           setMessageText('');
         }
     };
-
+console.log(props.messages)
   return (
     <Container>
-        { !props?.user && <Navigate to='/'/>}
+        { !props?.user && <Navigate to='/'/> }
+        { props.user &&
         <Chat>
-            <ChatLog>
-                    {props.messages.map((message) => (
+            <ChatLog ref={messagesContainerRef}>
+                    {props.messages.map((message, i) => (
                     <Message key={message.id}>
-                        { props.user?.photoURL ? (
-                            <img src={props.user?.photoURL}/>
+                        { props.user?.uid === message.userId  ? (
+                            <img src={props.user?.photoURL || '/images/nav-user.png'}/>
                         ) : (
-                            <img src='/images/nav-user.png'/>
+                            <img src={message.photo || '/images/nav-user.png'}/>
                         )}
                         <MessageBody>
                             <div>
@@ -66,16 +85,17 @@ function Messaging(props) {
                     value={messageText} 
                     placeholder='Start a conversation..'
                     onChange={(e) => setMessageText(e.target.value)}
+                    onKeyDown={handleKeyDown}
                 />
                 <button 
                     disabled={!messageText}
                     onClick={() => sendMessage(messageText)}
-                    onKeyDown={handleKeyDown}
                 >
                     Send
                 </button>
             </MessageInput>
         </Chat>
+        }
     </Container>
   )
 }
@@ -101,7 +121,7 @@ const Container = styled.div`
     width: 100vw;
     justify-content: center;
     @media (max-width: 768px) {
-        grid-template-columns: auto;
+        grid-template-columns: 100%;
         width: 100%;
     }
 `;

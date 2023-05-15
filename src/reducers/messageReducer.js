@@ -1,12 +1,12 @@
-import { GET_MESSAGES } from "../actions/actionType"
+import { GET_MESSAGES, SEND_MESSAGE } from "../actions/actionType"
 
 export const initialState = {
     messages: [],
-    loading: false,
 }
 
 const messageReducer = (state = initialState, action) => {
     switch(action.type) {
+        // this has to be more efficient so I don't fetch the entire array every time a new message is sent
         case GET_MESSAGES:
             return {
                 ...state,

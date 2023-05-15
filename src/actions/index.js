@@ -3,7 +3,7 @@ import { auth, provider, signInWithPopup, storage, collection, addDoc, uploadByt
 import { onSnapshot, updateDoc } from 'firebase/firestore'
 import { ref, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT, POST_MESSAGE, GET_MESSAGES } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT, SEND_MESSAGE, GET_MESSAGES } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -37,11 +37,6 @@ export const deleteComment = (payload) => ({
 
 export const deletePost = (payload) => ({
   type: DELETE_POST,
-  payload: payload,
-})
-
-export const postMessage = (payload) => ({
-  type: POST_MESSAGE,
   payload: payload,
 })
 
@@ -301,7 +296,6 @@ export function deleteCommentAPI(payload) {
 export function sendMessageAPI(payload) {
   return (dispatch) => {
     const messagesRef = collection(db, 'messages');
-    console.log(payload);
     addDoc(messagesRef, payload)
       .then((docRef) => {
       })
