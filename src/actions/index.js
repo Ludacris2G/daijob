@@ -304,6 +304,7 @@ export function sendMessageAPI(payload) {
 
 export function getMessagesAPI(payload) {
   return (dispatch) => {
+    dispatch(setLoading(true));
     const messagesRef = collection(db, 'messages');
     const q = query(messagesRef, orderBy('time', 'desc'));
     const unsub = onSnapshot(q, orderBy('time', 'asc'), (querySnapshot) => {
@@ -313,6 +314,7 @@ export function getMessagesAPI(payload) {
         return message;
       });
       dispatch(getMessages(payload));
+      dispatch(setLoading(false));
     })
   }
 }

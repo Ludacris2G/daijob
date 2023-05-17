@@ -15,8 +15,10 @@ const PostModal = (props) => {
     useEffect(() => {
         if (props.showPictureUpload === 'image') {
             switchAssetArea('image');
+        } else if (props.showVideoUpload === 'video') {
+            switchAssetArea('media');
         }
-    }, [props.showPictureUpload])
+    }, [props.showPictureUpload, props.showVideoUpload])
 
     const handleChange = (e) => {
         const image = e.target.files[0];
@@ -40,6 +42,7 @@ const PostModal = (props) => {
         setVideoLink("");
         setAssetArea("");
         props.handleClosePhotoClick();
+        props.handleCloseVideoClick();
         props.handleClick(e);
     };
 

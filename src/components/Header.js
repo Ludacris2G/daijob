@@ -1,9 +1,6 @@
 import styled from 'styled-components'
 import { signOutAPI } from '../actions';
 import { connect } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useState } from 'react';
 
 function Header(props) {
 

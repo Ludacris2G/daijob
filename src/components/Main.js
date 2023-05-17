@@ -6,10 +6,12 @@ import { deletePostAPI, getArticlesAPI, likePostAPI, switchAreaPhoto } from '../
 import ReactPlayer from 'react-player';
 import CommentModal from './CommentModal';
 import Comment from './Comment';
+import moment from 'moment';
 
 function Main(props) {
   const [showModal, setModal] = useState("close");
   const [showPictureUpload, setShowPictureUpload] = useState('');
+  const [showVideoUpload, setShowVideoUpload] = useState('');
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [showArticleSettings, setShowArticleSettings] = useState(Array(props.articles.length).fill(false));
   const [deleteWarning, setDeleteWarning] = useState(false);
@@ -67,8 +69,34 @@ function Main(props) {
     setShowPictureUpload('image');
   }
 
+  const handleVideoClick = (e) => {
+    e.preventDefault();
+
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    switch(showModal) {
+      case "open":
+        setModal("close");
+        break;
+      case "close":
+        setModal("open");
+        break;
+      default:
+        setModal("close");
+        break;
+    }
+
+    setShowVideoUpload('video');
+  }
+
   const handleClosePhotoClick = () => {
     setShowPictureUpload('');
+  }
+
+  const handleCloseVideoClick = () => {
+    setShowVideoUpload('');
   }
 
   const likePost = (e, id) => {
@@ -169,7 +197,7 @@ function Main(props) {
               <img src="/images/photo-icon.png" alt="" />
               <span>Photo</span>
             </button>
-            <button>
+            <button disabled={props.loading} onClick={handleVideoClick}>
               <img src="/images/video-icon.png" alt="" />
               <span>Video</span>
             </button>
@@ -200,7 +228,7 @@ function Main(props) {
                   <span>{article.actor.title}</span>
                   <span>{article.actor.description}</span>
                   {article && article.actor && article.actor.date && (
-                    <span>{article.actor.date.toDate().toLocaleDateString()}</span>
+                    <span>{ moment.unix(article.actor.date.seconds).fromNow()}</span>
                   )}
                 </div>
               </a>
@@ -290,7 +318,14 @@ function Main(props) {
           </Article>
         ))}
         </Content>
-        <PostModal showModal={showModal} handleClick={handleClick} setShowPictureUpload={setShowPictureUpload} showPictureUpload={showPictureUpload} handleClosePhotoClick={handleClosePhotoClick} />
+        <PostModal 
+          showModal={showModal} 
+          handleClick={handleClick} 
+          setShowPictureUpload={setShowPictureUpload} showPictureUpload={showPictureUpload} handleClosePhotoClick={handleClosePhotoClick} 
+          setShowVideoUpload={setShowVideoUpload}
+          showVideoUpload={showVideoUpload}
+          handleCloseVideoClick={handleCloseVideoClick}
+        />
       </Container>
     </div>
   )

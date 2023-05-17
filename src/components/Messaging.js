@@ -11,6 +11,7 @@ import { useRef } from 'react';
 function Messaging(props) {
     const [messageText, setMessageText] = useState('');
     const messagesContainerRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const sendMessage = (text) => {
@@ -52,13 +53,16 @@ function Messaging(props) {
           setMessageText('');
         }
     };
-console.log(props.user)
   return (
     <Container>
-        { !props?.user && <Navigate to='/'/> }
+        { !props.user && <Navigate to='/'/> }
         { props.user &&
         <Chat>
             <ChatLog ref={messagesContainerRef}>
+                { isLoading ? (
+                          <img className='loading' src="/images/loading.gif" alt=""/>
+                ) : (
+                    <>
                     {props.messages.map((message, i) => (
                     <Message key={message.id}>
                         { props.user?.uid === message.userId  ? (
@@ -74,6 +78,8 @@ console.log(props.user)
                         </MessageBody>
                     </Message>
                     ))}
+                    </>
+                )}
             </ChatLog>
             <MessageInput>
                 { props.user ? (
