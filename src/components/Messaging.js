@@ -7,11 +7,12 @@ import { getMessagesAPI, sendMessageAPI } from '../actions';
 import { serverTimestamp } from 'firebase/firestore';
 import { Navigate } from 'react-router-dom';
 import { useRef } from 'react';
+import moment from 'moment';
 
 function Messaging(props) {
     const [messageText, setMessageText] = useState('');
     const messagesContainerRef = useRef(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
 
     const sendMessage = (text) => {
@@ -35,6 +36,11 @@ function Messaging(props) {
     useEffect(() => {
         props.getMessages();
         scrollToBottom();
+        if (props.messages) {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 500); // Delay of 500 milliseconds
+        }
     }, []);
 
     useEffect(() => {
@@ -53,6 +59,7 @@ function Messaging(props) {
           setMessageText('');
         }
     };
+    console.log(props.messages)
   return (
     <Container>
         { !props.user && <Navigate to='/'/> }
@@ -72,7 +79,10 @@ function Messaging(props) {
                         )}
                         <MessageBody>
                             <div>
-                            <h2>{message.name === props.user.displayName ? 'Me' : message.name}</h2>
+                                {message.time && (
+                                <span className='date'>{moment.unix(message.time.seconds).fromNow()}</span>
+                                )}
+                                <h2>{message.name === props.user.displayName ? 'Me' : message.name}</h2>
                                 <p>{message.text}</p>
                             </div>
                         </MessageBody>
@@ -138,7 +148,6 @@ const Chat = styled.div`
     flex-direction: column;
     @media (max-width:768px) {
         padding-top: 35px;
-        margin-bottom: 71px;
     }
 `;
 
@@ -203,13 +212,22 @@ const Message = styled.div`
 
 const MessageBody = styled.div`
     div {  
-        padding: 5px 10px;
+        min-width: 150px;
+        padding: 9px 12px;
         border-radius: 20px;
         background-color: white;
-        color: rgba(0, 0, 0, .7);
+        color: white;
         font-size: 14px;
+        position: relative;
         h2 {
             color: #000;
+            margin-bottom: 5px;
+        }
+        .date {
+            position: absolute;
+            right: 10px;
+            color: rgba(0, 0, 0, .7);
+            font-size: 8px;
         }
     }
 `;

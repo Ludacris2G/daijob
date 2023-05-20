@@ -238,7 +238,7 @@ function Main(props) {
               >
                 {showArticleSettings[index] && <DeleteButton onClick={() => handleDelete(article.id, index)} 
                 />}
-                <img src="/images/three-dots.svg" alt="" />
+                <img className='three-dots' src="/images/three-dots.svg" alt="" />
               </button>
               }
             </SharedActor>
