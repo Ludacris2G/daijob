@@ -148,6 +148,7 @@ const Chat = styled.div`
     flex-direction: column;
     @media (max-width:768px) {
         padding-top: 35px;
+        margin-bottom: 71px;
     }
 `;
 
@@ -195,7 +196,7 @@ const ChatLog = styled.div`
   display: flex;
   flex-direction: column-reverse;
   @media (max-width:768px) {
-    height: calc(100vh - 165px);
+    height: calc(100vh - 245px);
   }
 `;
 
@@ -216,7 +217,7 @@ const MessageBody = styled.div`
         padding: 9px 12px;
         border-radius: 20px;
         background-color: white;
-        color: white;
+        color: black;
         font-size: 14px;
         position: relative;
         h2 {
