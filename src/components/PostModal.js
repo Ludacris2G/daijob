@@ -57,7 +57,8 @@ const PostModal = (props) => {
             video: videoLink,
             user: props.user,
             description: editorText,
-            timestamp: serverTimestamp()
+            timestamp: serverTimestamp(),
+            type: 'article'
         };
 
         props.postArticle(payload);

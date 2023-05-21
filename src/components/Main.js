@@ -2,14 +2,16 @@ import styled from 'styled-components'
 import PostModal from './PostModal'
 import { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { deletePostAPI, getArticlesAPI, likePostAPI, switchAreaPhoto } from '../actions';
+import { deletePostAPI, getArticlesAPI, likePostAPI } from '../actions';
 import ReactPlayer from 'react-player';
 import CommentModal from './CommentModal';
 import Comment from './Comment';
 import moment from 'moment';
+import EventModal from './EventModal';
 
 function Main(props) {
-  const [showModal, setModal] = useState("close");
+  const [showModal, setModal] = useState('close');
+  const [showEventModal, setEventModal] = useState('close');
   const [showPictureUpload, setShowPictureUpload] = useState('');
   const [showVideoUpload, setShowVideoUpload] = useState('');
   const [showCommentModal, setShowCommentModal] = useState(false);
@@ -20,12 +22,13 @@ function Main(props) {
   useEffect(() => {
     props.getArticles();
 
-    if (deleteWarning) {
+    const modalOpen = deleteWarning || showModal === 'open' || showEventModal === 'open';
+    if (modalOpen) {
       document.body.classList.add('modal-open');
     } else {
       document.body.classList.remove('modal-open');
     }
-  }, []);
+  }, [deleteWarning, showModal, showEventModal]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -89,6 +92,20 @@ function Main(props) {
     }
 
     setShowVideoUpload('video');
+  }
+
+  const handleEventClick = () => {
+    switch(showEventModal) {
+      case 'open':
+        setEventModal('close');
+        break;
+      case 'close':
+        setEventModal('open');
+        break;
+      default:
+        setEventModal('close');
+        break;
+    }
   }
 
   const handleClosePhotoClick = () => {
@@ -201,7 +218,7 @@ function Main(props) {
               <img src="/images/video-icon.png" alt="" />
               <span>Video</span>
             </button>
-            <button>
+            <button disabled={props.loading} onClick={handleEventClick}>
               <img src="/images/event.png" alt="" />
               <span>Event</span>
             </button>
@@ -211,111 +228,111 @@ function Main(props) {
             </button>
           </div>
         </ShareBox>
-        { props?.articles.length === 0 && <p>No articles</p> }
+        { props.articles.length === 0 && <p>No articles</p> }
         <Content>
           {props.loading && <img className='loading' src="/images/loading.gif" alt="" />}
-          {props?.articles.length > 0 && 
+          {props.articles.length > 0 && 
           props.articles.map((article, index) => (
-          <Article key={article.id}>
-            <SharedActor onBlur={() => setShowArticleSettings(showArticleSettings.map((value, i) => i === index ? false : value))}>
-              <a>
-                { article.actor.image ? (
-                  <img src={ article.actor.image } alt="" />
-                ) : (
-                  <img src={ '/images/nav-user.png' } alt="" />
-                )}
-                <div>
-                  <span>{article.actor.title}</span>
-                  <span>{article.actor.description}</span>
-                  {article && article.actor && article.actor.date && (
-                    <span>{ moment.unix(article.actor.date.seconds).fromNow()}</span>
-                  )}
-                </div>
-              </a>
-              { props.user?.email === article.actor?.description &&
-              <button 
-                onClick={(e) => openArticleSettings(index, e)}
-              >
-                {showArticleSettings[index] && <DeleteButton onClick={() => handleDelete(article.id, index)} 
-                />}
-                <img className='three-dots' src="/images/three-dots.svg" alt="" />
-              </button>
-              }
-            </SharedActor>
-            <Description>
-              {article.description}
-            </Description>
-            <SharedImg>
-              <a>
-                  {
-                     article.video ? (
-                      <ReactPlayer width={'100%'} url={article.video} controls/>
+              <Article key={article.id}>
+                <SharedActor onBlur={() => setShowArticleSettings(showArticleSettings.map((value, i) => i === index ? false : value))}>
+                  <a>
+                    { article.actor.image ? (
+                      <img src={ article.actor.image } alt="" />
                     ) : (
-                      <img src={article.sharedImg} alt="" />
-                    )
+                      <img src={ '/images/nav-user.png' } alt="" />
+                    )}
+                    <div>
+                      <span>{article.actor.title}</span>
+                      <span>{article.actor.description}</span>
+                      {article && article.actor && article.actor.date && (
+                        <span>{ moment.unix(article.actor.date.seconds).fromNow()}</span>
+                      )}
+                    </div>
+                  </a>
+                  { props.user?.email === article.actor?.description &&
+                  <button 
+                    onClick={(e) => openArticleSettings(index, e)}
+                  >
+                    {showArticleSettings[index] && <DeleteButton onClick={() => handleDelete(article.id, index)} 
+                    />}
+                    <img className='three-dots' src="/images/three-dots.svg" alt="" />
+                  </button>
                   }
-              </a>
-            </SharedImg>
-            <SocialCounts>
-              <li>
-                <button>
-                  <img src="/images/親指.png" alt="" />
-                  <img src="/images/washing-hands.png" alt="" />
-                  <span>{article.likes}</span>
-                </button>
-              </li>
-              <li>
-                <a>
-                  {article.comments} comments
-                </a>
-              </li>
-            </SocialCounts>
-            <SocialActions>
-              <button 
-                style={{backgroundColor: article.likeUsers.includes(props?.user?.email) ? 'rgba(0, 0, 0, 0.2) ' : '#f0f0f0'}} 
-                onClick={(e) => likePost(e, article.id)}
-              >
-                <img src="/images/親指.png" alt="" />
-                <span 
-                  style={{fontWeight: article.likeUsers.includes(props?.user?.email) ? '700' : '400'}}
-                >
-                  Like
-                </span>
-              </button>
-              <button 
-                onClick={openCommentModal}
-                style={{backgroundColor: showCommentModal ? 'rgba(0, 0, 0, .2)' : '#f0f0f0'}}
-              >
-                <img src="/images/megaphone.png" alt="" />
-                <span style={{fontWeight: showCommentModal ? '700' : '400'}}>Comment</span>
-              </button>
-              <button>
-                <img src="/images/share.png" alt="" />
-                <span>Share</span>
-              </button>
-              <button>
-                <img src="/images/紙飛行機.png" alt="" />
-                <span>Send</span>
-              </button>
-            </SocialActions>
-            { showCommentModal && (<CommentModal id={article.id}/>)}
-            { article.comments > 0 && article.commentsUsers.map((comment, i) => (
-              <Comment key={i} comment={comment} email={props.user?.email} article={article}/>
-            ))}
-            {deleteWarning && 
-            <DeleteWarning>
-              <div id='delete-warning' onClick={handleOutsideClick}>
-              <Card>
-                  <p>Are you sure you want to delete this post?</p>
-                  <div>
-                    <button onClick={(e) => deletePost(e)}>Yes</button>
-                    <button onClick={(e) => handleDelete(e)}>No</button>
+                </SharedActor>
+                <Description>
+                  {article.description}
+                </Description>
+                <SharedImg>
+                  <a>
+                      {
+                         article.video ? (
+                          <ReactPlayer width={'100%'} url={article.video} controls/>
+                        ) : (
+                          <img src={article.sharedImg} alt="" />
+                        )
+                      }
+                  </a>
+                </SharedImg>
+                <SocialCounts>
+                  <li>
+                    <button>
+                      <img src="/images/親指.png" alt="" />
+                      <img src="/images/washing-hands.png" alt="" />
+                      <span>{article.likes}</span>
+                    </button>
+                  </li>
+                  <li>
+                    <a>
+                      {article.comments} comments
+                    </a>
+                  </li>
+                </SocialCounts>
+                <SocialActions>
+                  <button 
+                    style={{backgroundColor: article.likeUsers.includes(props?.user?.email) ? 'rgba(0, 0, 0, 0.2) ' : '#f0f0f0'}} 
+                    onClick={(e) => likePost(e, article.id)}
+                  >
+                    <img src="/images/親指.png" alt="" />
+                    <span 
+                      style={{fontWeight: article.likeUsers.includes(props?.user?.email) ? '700' : '400'}}
+                    >
+                      Like
+                    </span>
+                  </button>
+                  <button 
+                    onClick={openCommentModal}
+                    style={{backgroundColor: showCommentModal ? 'rgba(0, 0, 0, .2)' : '#f0f0f0'}}
+                  >
+                    <img src="/images/megaphone.png" alt="" />
+                    <span style={{fontWeight: showCommentModal ? '700' : '400'}}>Comment</span>
+                  </button>
+                  <button>
+                    <img src="/images/share.png" alt="" />
+                    <span>Share</span>
+                  </button>
+                  <button>
+                    <img src="/images/紙飛行機.png" alt="" />
+                    <span>Send</span>
+                  </button>
+                </SocialActions>
+                { showCommentModal && (<CommentModal id={article.id}/>)}
+                { article.comments > 0 && article.commentsUsers.map((comment, i) => (
+                  <Comment key={i} comment={comment} email={props.user?.email} article={article}/>
+                ))}
+                {deleteWarning && 
+                <DeleteWarning>
+                  <div id='delete-warning' onClick={handleOutsideClick}>
+                  <Card>
+                      <p>Are you sure you want to delete this post?</p>
+                      <div>
+                        <button onClick={(e) => deletePost(e)}>Yes</button>
+                        <button onClick={(e) => handleDelete(e)}>No</button>
+                      </div>
+                  </Card>
                   </div>
-              </Card>
-              </div>
-            </DeleteWarning>
-            }
-          </Article>
+                </DeleteWarning>
+                }
+              </Article>
         ))}
         </Content>
         <PostModal 
@@ -325,6 +342,10 @@ function Main(props) {
           setShowVideoUpload={setShowVideoUpload}
           showVideoUpload={showVideoUpload}
           handleCloseVideoClick={handleCloseVideoClick}
+        />
+        <EventModal 
+          showModal={showEventModal} 
+          handleClick={handleEventClick} 
         />
       </Container>
     </div>

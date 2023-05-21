@@ -1,9 +1,9 @@
 import firebase from 'firebase/app'
 import { auth, provider, signInWithPopup, storage, collection, addDoc, uploadBytesResumable, doc, getDoc, orderBy, query, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteDoc } from '../firebase'
-import { onSnapshot, updateDoc } from 'firebase/firestore'
+import { getDocs, onSnapshot, updateDoc } from 'firebase/firestore'
 import { ref, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT, SEND_MESSAGE, GET_MESSAGES } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT, SEND_MESSAGE, GET_MESSAGES, GET_EVENTS } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -42,6 +42,11 @@ export const deletePost = (payload) => ({
 
 export const getMessages = (payload) => ({
   type: GET_MESSAGES,
+  payload: payload,
+})
+
+export const getEvents = (payload) => ({
+  type: GET_EVENTS,
   payload: payload,
 })
 
@@ -111,6 +116,7 @@ export function postArticleAPI(payload, onProgress) {
                 likes: 0,
                 likeUsers: [],
                 description: payload.description,
+                type: payload.type,
               };
               addDoc(articlesRef, article)
                 .then((docRef) => {
@@ -141,6 +147,7 @@ export function postArticleAPI(payload, onProgress) {
           likes: 0,
           likeUsers: [],
           description: payload.description,
+          type: payload.type,
         }
         addDoc(articlesRef, article)
           .then(() => {
@@ -156,9 +163,48 @@ export function postArticleAPI(payload, onProgress) {
   
 export function getArticlesAPI() {
   let payload;
+  // return (dispatch) => {
+  //   const articlesRef = collection(db, 'articles');
+  //   const eventsRef = collection(db, 'events');
+
+  //   const q = query(articlesRef, orderBy('actor.date', 'desc'));
+  //   const eventsQuery = query(eventsRef, orderBy('date', 'desc'));
+
+  //   const articlesPromise = getDocs(q)
+  //     .then((querySnapshot) => {
+  //       const articles = querySnapshot.docs.map((doc) => {
+  //         const article = doc.data();
+  //         article.id = doc.id;
+  //         return article;
+  //       });
+  //       return articles;
+  //     });
+
+  //   const eventsPromise = getDocs(eventsQuery)
+  //     .then((querySnapshot) => {
+  //       const events = querySnapshot.docs.map((doc) => {
+  //         const event = doc.data();
+  //         event.id = doc.id;
+  //         return event;
+  //       });
+  //       return events;
+  //     });
+
+  //   Promise.all([eventsPromise, articlesPromise])
+  //     .then(([articles, events]) => {
+  //       const payload = [...articles, ...events];
+  //       console.log(payload);
+  //       payload.sort((a, b) => b.actor.date - a.actor.date);
+  //       dispatch(getArticles(payload));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.message);
+  //     });
+  // };
 
   return (dispatch) => {
     const articlesRef = collection(db, 'articles');
+    
     const q = query(articlesRef, orderBy('actor.date', 'desc'));
     const unsub = onSnapshot(q, orderBy('date', 'asc'), (querySnapshot) => {
       payload = querySnapshot.docs.map((doc) => {
@@ -315,6 +361,49 @@ export function getMessagesAPI(payload) {
       });
       dispatch(getMessages(payload));
       dispatch(setLoading(false));
+    })
+  }
+}
+
+export function postEventAPI(payload) {
+  return (dispatch) => {
+    const eventsRef = collection(db, 'events');
+    const payloadz = {
+      actor: {
+        description: payload.user.email,
+        title: payload.user.displayName,
+        image: payload.user.photoURL,
+        timestamp: payload.timestamp,
+      },
+      date: payload.date,
+      description: payload.description,
+      eventType: payload.eventType,
+      name: payload.name,
+      type: payload.type,
+    }
+    addDoc(eventsRef, payloadz)
+      .then(() => {
+        console.log('event added');
+      })
+      .catch((error) => {
+        console.log(error.message);
+      })
+  }
+}
+
+export function getEventsAPI(payload) {
+  return (dispatch) => {
+    let payload;
+    const eventsRef = collection(db, 'events');
+    const q = query(eventsRef, orderBy('actor.timestamp', 'desc'));
+    const unsub = onSnapshot(q, orderBy('actor.timestamp', 'asc'),
+    (querySnapshot) => {
+      payload = querySnapshot.docs.map((doc) => {
+        const event = doc.data();
+        event.id = doc.id;
+        return event;
+      });
+      dispatch(getEvents(payload));
     })
   }
 }

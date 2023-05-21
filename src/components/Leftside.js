@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components'
+import { getEventsAPI } from '../actions';
 
 function Leftside(props) {
+  useEffect(() => {
+    props.getEvents();
+  },[]);
   return (
     <div>
       <Container>
@@ -17,11 +22,11 @@ function Leftside(props) {
               <Link> Welcome, 
               {props.user ? ' ' + props.user?.displayName + '!' : 'there!'}</Link>
             </a>
-            <a>
+            {/* <a>
               <AddPhotoText>Add a photo</AddPhotoText>
-            </a>
+            </a> */}
           </UserInfo>
-          <Widget>
+          {/* <Widget>
             <a>
               <div>
                 <span>Connections</span>
@@ -35,9 +40,17 @@ function Leftside(props) {
               <img src="/images/bookmark.png" alt="" />
               My Items
             </span>
-          </Item>
+          </Item> */}
         </ArtCard>
         <CommunityCard>
+          <a href="">
+            <span>Events</span>
+          </a>
+          <a href="">
+            <span>more</span>
+          </a>
+        </CommunityCard>
+        {/* <CommunityCard>
           <a>
             <span>Groups</span>
           </a>
@@ -52,7 +65,7 @@ function Leftside(props) {
           <a>
             <span>Discover more</span>
           </a>
-        </CommunityCard>
+        </CommunityCard> */}
       </Container>
     </div>
   )
@@ -61,10 +74,13 @@ function Leftside(props) {
 const mapStateToProps = (state) => {
   return {
     user: state.userState.user,
+    events: state.eventState.events,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  getEvents: () => dispatch(getEventsAPI())
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leftside);
 
