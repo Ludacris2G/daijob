@@ -2,11 +2,30 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components'
 import { getEventsAPI } from '../actions';
+import moment from 'moment';
+import { useState } from 'react';
 
 function Leftside(props) {
+  const [showSettings, setSettings] = useState(Array(props.events.length).fill(false));
+  console.log(showSettings);
   useEffect(() => {
     props.getEvents();
   },[]);
+
+  function calculateRemainingDays(targetDate) {
+    const currentDate = new Date();
+    const targetDateTime = new Date(targetDate).getTime();
+    const remainingTime = targetDateTime - currentDate.getTime();
+
+    const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+
+    if (days >= 0) {
+      return `Days remaining: ${days}`;
+    }
+    else {
+      return `This event has ended`;
+    }
+  }
   return (
     <div>
       <Container>
@@ -42,14 +61,30 @@ function Leftside(props) {
             </span>
           </Item> */}
         </ArtCard>
+          { props.events.length > 0 && 
         <CommunityCard>
-          <a href="">
-            <span>Events</span>
-          </a>
-          <a href="">
-            <span>more</span>
-          </a>
+          
+          <span>Upcoming Events</span>
+          { props.events.length > 0 &&
+          props.events.map((event, i ) => (
+          <Event key={event.id}>
+            <div className="actor">
+              <img src={event.actor?.image} alt="" />
+              <h2>{event.actor?.title}</h2>
+              <small>{moment.unix(event.actor?.timestamp?.seconds).fromNow()}</small>
+              <button className='dots'>
+                <img src="/images/three-dots.svg" alt="" />
+              </button>
+            </div>
+            <h2>{event.name}</h2>
+            <p>{calculateRemainingDays(event.date)}</p>
+            <p>{event.description}</p>
+            <p>{event.eventType}</p>
+          </Event>
+          ))
+          }
         </CommunityCard>
+          }
         {/* <CommunityCard>
           <a>
             <span>Groups</span>
@@ -208,11 +243,11 @@ const Item = styled.a`
 `;
 
 const CommunityCard = styled(ArtCard)`
-  padding: 8px 0 0;
+  background-color: #f5f5f5f5;
+  padding: 8px 2px;
   text-align: left;
   display: flex;
   flex-direction: column;
-
   a {
     color: black;
     padding: 4px 12px 4px 12px;
@@ -237,7 +272,54 @@ const CommunityCard = styled(ArtCard)`
       }
     }
   }
+  span {
+    text-align: center;
+    font-weight: 600;
+  }
   img {
     width: 17px;
+  }
+`;
+
+const Event = styled.div`
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 5px;
+  .actor {
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 12px;
+    small {
+      margin-left: auto;
+      margin-right: 10px;
+      font-size: 10px;
+    }
+    button {
+      background-color: inherit;
+      border: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      cursor: pointer;
+      img {
+        width: 13px;
+      }
+    }
+  }
+  img {
+    border-radius: 50%;
+    width: 30px;
+    margin-right: 4px;
+  }
+  h2 {
+    margin: 5px 0;
+  }
+  p {
+    margin: 5px 0;
+    text-transform: capitalize;
+    font-size: 12px;
   }
 `;
