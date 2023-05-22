@@ -73,7 +73,11 @@ function Messaging(props) {
                     {props.messages.map((message, i) => (
                     <Message key={message.id}>
                         { props.user?.uid === message.userId  ? (
-                            <img src={message?.photo}/>
+                            message.photo ? (
+                                <img src={message.photo}/>
+                            ) : (
+                                <img src="/images/nav-user.png" alt="" />
+                            )
                         ) : (
                             <img src={message.photo || '/images/nav-user.png'}/>
                         )}
