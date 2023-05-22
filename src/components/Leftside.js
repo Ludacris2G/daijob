@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components'
-import { getEventsAPI } from '../actions';
+import { deleteEventAPI, getEventsAPI } from '../actions';
 import moment from 'moment';
 import { useState } from 'react';
 
 function Leftside(props) {
   const [showSettings, setSettings] = useState(Array(props.events.length).fill(false));
-  console.log(showSettings);
+  console.log(showSettings)
+  
   useEffect(() => {
     props.getEvents();
   },[]);
@@ -26,6 +27,23 @@ function Leftside(props) {
       return `This event has ended`;
     }
   }
+
+  const openSettings = (i) => {
+    setSettings((prevState) => {
+      const updatedSettings = [...prevState];
+      updatedSettings[i] = !updatedSettings[i];
+      return updatedSettings;
+    })
+  };
+
+  const deleteEvent = (i) => {
+    if (props.user.uid !== props.events[i].actor.uid) {
+      return;
+    }
+    
+    props.deleteEvent(props.events[i].id);
+  }
+
   return (
     <div>
       <Container>
@@ -67,17 +85,23 @@ function Leftside(props) {
           <span>Upcoming Events</span>
           { props.events.length > 0 &&
           props.events.map((event, i ) => (
-          <Event key={event.id}>
+          <Event key={event.id} onBlur={() => setSettings(showSettings.map((value, i) => i === i ? false : value))}>
             <div className="actor">
-              <img src={event.actor?.image} alt="" />
+              { event.actor.image ? (
+                <img src={event.actor?.image} alt="" />
+              ) : (
+                <img src="/images/nav-user.png" alt="" />
+              ) }
               <h2>{event.actor?.title}</h2>
               <small>{moment.unix(event.actor?.timestamp?.seconds).fromNow()}</small>
-              <button className='dots'>
+              <button onClick={() => openSettings(i)} className='dots'>
                 <img src="/images/three-dots.svg" alt="" />
+                { showSettings[i] && 
+                <span onClick={() => deleteEvent(i)} className='deletion-button'>Delete</span>}
               </button>
             </div>
             <h2>{event.name}</h2>
-            <p>{calculateRemainingDays(event.date)}</p>
+            <p>{event.date} {calculateRemainingDays(event.date)}</p>
             <p>{event.description}</p>
             <p>{event.eventType}</p>
           </Event>
@@ -114,7 +138,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getEvents: () => dispatch(getEventsAPI())
+  getEvents: () => dispatch(getEventsAPI()),
+  deleteEvent: (payload) => dispatch(deleteEventAPI(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Leftside);
@@ -306,6 +331,15 @@ const Event = styled.div`
       cursor: pointer;
       img {
         width: 13px;
+      }
+      .deletion-button {
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        background-color: rgba(0, 0, 0, .8);
+        border-radius: 10px;
+        padding: 10px;
+        color: white;
       }
     }
   }

@@ -3,7 +3,7 @@ import { auth, provider, signInWithPopup, storage, collection, addDoc, uploadByt
 import { getDocs, onSnapshot, updateDoc } from 'firebase/firestore'
 import { ref, getDownloadURL } from 'firebase/storage'
 import db from '../firebase'
-import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT, SEND_MESSAGE, GET_MESSAGES, GET_EVENTS } from '../actions/actionType'
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES, LIKE_POST, COMMENT_POST, DELETE_POST, DELETE_COMMENT, SEND_MESSAGE, GET_MESSAGES, GET_EVENTS, DELETE_EVENT } from '../actions/actionType'
 
 export const setUser = (payload) => ({
     type: SET_USER,
@@ -47,6 +47,11 @@ export const getMessages = (payload) => ({
 
 export const getEvents = (payload) => ({
   type: GET_EVENTS,
+  payload: payload,
+})
+
+export const deleteEvent = (payload) => ({
+  type: DELETE_EVENT,
   payload: payload,
 })
 
@@ -374,6 +379,7 @@ export function postEventAPI(payload) {
         title: payload.user.displayName,
         image: payload.user.photoURL,
         timestamp: payload.timestamp,
+        uid: payload.user.uid
       },
       date: payload.date,
       description: payload.description,
@@ -405,5 +411,18 @@ export function getEventsAPI(payload) {
       });
       dispatch(getEvents(payload));
     })
+  }
+}
+
+export function deleteEventAPI(eventId) {
+  return (dispatch) => {
+    const eventRef = doc(db, 'events', eventId);
+    deleteDoc(eventRef)
+      .then(() => {
+        dispatch(deleteEvent(eventId));
+      })
+      .catch((error) => {
+        console.log('Error deleting event: ', error.message);
+      })
   }
 }
