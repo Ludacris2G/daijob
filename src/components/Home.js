@@ -10,9 +10,17 @@ function Home(props) {
         <Container>
                 {!props?.user && <Navigate to='/'/>}
             <Layout>
+                <Grid area='leftside'>
                 <Leftside />
+                </Grid>
+                <Grid area='main'>
                 <Main />
+
+                </Grid>
+                <Grid area='rightside'>
+
                 <Rightside />
+                </Grid>
             </Layout>
         </Container>
     )
@@ -43,9 +51,16 @@ const Layout = styled.div`
     margin: 25px 0;
     transition: all .3s linear;
     @media (max-width: 768px) {
-        display: flex;
-        flex-direction: column;
-        padding: 0 5px;
-    }
+    grid-template-areas:
+      'main'
+      'leftside'
+      'rightside';
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: -10px;
+  }
+`;
+
+const Grid = styled.div`
+    grid-area: ${props => props.area};
 `;
 
