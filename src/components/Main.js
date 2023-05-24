@@ -475,6 +475,13 @@ const Article = styled(CommonCard)`
   padding-bottom: 1px;
   .loading {
     width: 100%;
+    height: 100%;
+  }
+  @media (max-width: 768px) {
+    .loading {
+      height: 500px;
+      object-fit: cover;
+    }
   }
 `;
 const SharedActor = styled.div`
