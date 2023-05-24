@@ -1,8 +1,15 @@
 import styled from 'styled-components'
-import { signOutAPI } from '../actions';
+import { searchPostAPI, signOutAPI } from '../actions';
 import { connect } from 'react-redux';
+import { useState } from 'react';
 
 function Header(props) {
+    const [search, setSearch] = useState('');
+    console.log(search);
+    const searchPost = (query) => {
+        setSearch(query);
+        props.searchPost(query);
+    }
 
   return (
     <Container>
@@ -14,7 +21,12 @@ function Header(props) {
             </Logo>
             <Search>
                 <div>
-                    <input type="text" placeholder='Search' />
+                    <input 
+                    type="text" 
+                    placeholder='Search' 
+                    value={search}
+                    onChange={(e) => setSearch(e.currentTarget.value)}
+                    />
                 </div>
                 <SearchIcon>
                     <img src="/images/search.png" alt="" />
@@ -98,6 +110,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     signOut: () => dispatch(signOutAPI()),
+    searchPost: (payload) => dispatch(searchPostAPI(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

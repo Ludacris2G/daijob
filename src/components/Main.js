@@ -18,6 +18,7 @@ function Main(props) {
   const [showArticleSettings, setShowArticleSettings] = useState(Array(props.articles.length).fill(false));
   const [deleteWarning, setDeleteWarning] = useState(false);
   const [articleDeletionId, setArticleDeletionId] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     props.getArticles();
@@ -28,6 +29,12 @@ function Main(props) {
     } else {
       document.body.classList.remove('modal-open');
     }
+
+    setInterval(() => {
+      if (props.articles) {
+        setIsLoading(false);
+      }      
+    }, 2000);
   }, [deleteWarning, showModal, showEventModal]);
 
   const handleClick = (e) => {
@@ -228,12 +235,15 @@ function Main(props) {
             </button>
           </div>
         </ShareBox>
-        { props.articles.length === 0 && <p>No articles</p> }
         <Content>
           {props.loading && <img className='loading' src="/images/loading.gif" alt="" />}
           {props.articles.length > 0 && 
           props.articles.map((article, index) => (
               <Article key={article.id}>
+                { isLoading ? (
+                  <img className='loading' src="/images/loading.gif" alt="" />
+                ) : (
+                  <>
                 <SharedActor onBlur={() => setShowArticleSettings(showArticleSettings.map((value, i) => i === index ? false : value))}>
                   <a>
                     { article.actor.image ? (
@@ -332,6 +342,8 @@ function Main(props) {
                   </div>
                 </DeleteWarning>
                 }
+                  </>
+                  )}
               </Article>
         ))}
         </Content>
@@ -461,6 +473,9 @@ const Article = styled(CommonCard)`
   margin: 0 0 8px;
   overflow: visible;
   padding-bottom: 1px;
+  .loading {
+    width: 100%;
+  }
 `;
 const SharedActor = styled.div`
   padding-right: 40px;

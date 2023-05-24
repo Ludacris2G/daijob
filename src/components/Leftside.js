@@ -7,7 +7,6 @@ import { useState } from 'react';
 
 function Leftside(props) {
   const [showSettings, setSettings] = useState(Array(props.events.length).fill(false));
-  console.log(showSettings)
   
   useEffect(() => {
     props.getEvents();

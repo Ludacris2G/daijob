@@ -426,3 +426,9 @@ export function deleteEventAPI(eventId) {
       })
   }
 }
+
+export function searchPostAPI(query) {
+  return (dispatch) => {
+    console.log(query);
+  }
+}
