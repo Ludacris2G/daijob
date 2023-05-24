@@ -10,6 +10,8 @@ This web app built with React and Redux allows you to post jobs, browse jobs, an
 - Comment on job listings
 - Log In and log out with Google
 - Create an account with email and password
+- Post and delete events
+- Text using the global chat
 - Join groups and interact with other jobseekers (coming soon)
 - Search for jobs posted by other users (coming soon)
 
