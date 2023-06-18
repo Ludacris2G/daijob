@@ -73,12 +73,14 @@ const Nav = styled.div`
     }
   }
   img {
-    height: 100%;
-    width: initial;
+    margin-top: 1rem;
+    height: initial;
+    width: 400px;
   }
-  @media (max-width: 500px) {
+  @media (max-width: 610px) {
     flex-direction: column;
     img {
+      margin-top: initial;
       width: 100%;
       transform: scale(1.7);
     }
@@ -156,7 +158,8 @@ const Hero = styled.div`
   h1 {
     padding-bottom: 0;
     width: 55%;
-    font-size: 56px;
+    font-size: 40px;
+    margin-left: 1rem;
     color: #2977c9;
     font-weight: 200;
     line-height: 70px;
@@ -165,6 +168,7 @@ const Hero = styled.div`
       font-size: 20px;
       width: 100%;
       line-height: 2;
+      margin-left: initial;
     }
   }
   img {

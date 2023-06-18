@@ -48,12 +48,13 @@ function Header(props) {
                             <span>My Network</span>
                         </a>
                     </NavList>
+                */}
                     <NavList>
-                        <a href="/home">
+                        <a href="/jobs">
                             <img src="/images/nav-jobs.png" alt="" />
                             <span>Jobs</span>
                         </a>
-                    </NavList> */}
+                    </NavList>
                     <NavList id='button2'>
                         <a 
                             href='/messaging'
